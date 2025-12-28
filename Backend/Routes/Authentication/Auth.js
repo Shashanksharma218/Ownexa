@@ -28,6 +28,7 @@ router.post("/auth/signup", async (req, res) => {
       error: err.message
     });
   }
-});
+}); 
+
 
 export default router;
