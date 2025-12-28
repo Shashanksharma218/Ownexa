@@ -1,11 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-
+import jwt from "jsonwebtoken";
 
 import CreateUser from "../../Database/Users/CreateUser.js";
 import LoginUser from "../../Database/Users/LoginUser.js";
 import supabase from "../../Database/SupabaseClient.js";
+import FindUser from "../../Database/Users/FindUser.js";
 
 
 dotenv.config();
@@ -73,8 +74,6 @@ router.post("/auth/login", async (req, res) => {
   }
 });
 
-
-
 router.get("/auth/logout", async (req, res) => {
   try {
     const token = req.cookies?.sb_token;
@@ -101,4 +100,42 @@ router.get("/auth/logout", async (req, res) => {
     });
   }
 });
+
+
+router.get("/auth/me", async (req, res) => {
+  try {
+    const token = req.cookies?.Ownexa_Token;
+    console.log(token);
+    if (!token) {
+      return res.status(401).json({
+        loggedIn: false,
+        message: "Not authenticated"
+      });
+    }
+    const decoded = jwt.decode(token);
+
+    if (!decoded?.sub) {
+      return res.status(401).json({
+        loggedIn: false,
+        message: "Invalid token"
+      });
+    }
+
+    const user = await FindUser(decoded.sub);
+
+    return res.status(200).json({
+      loggedIn: true,
+      user
+    });
+
+  } catch (err) {
+    console.error("Error Faced : ", err.message);
+    return res.status(500).json({
+      loggedIn: false,
+      error: "Something went wrong"
+    });
+  }
+}); 
+
+
 export default router;
