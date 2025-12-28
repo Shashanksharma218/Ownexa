@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 const router = express.Router();
 router.use(cookieParser());
+
+
 router.post("/auth/signup", async (req, res) => {
   try {
     const { Email, Password, Username } = req.body;
@@ -43,7 +45,7 @@ router.post("/auth/login", async (req, res) => {
 
     const { user, session } = await LoginUser({ Email, Password });
 
-    res.cookie("Ownexa_TOKEN", session.access_token, {
+    res.cookie("Ownexa_Token", session.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -67,4 +69,23 @@ router.post("/auth/login", async (req, res) => {
   }
 });
 
+
+router.get('/auth/logout', async (req, res) => {
+  try {
+    res.clearCookie("Ownexa_Token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+
+    return res.status(200).json({
+      message: "Logout Successful",
+      success: true
+    });
+  } catch (err) {
+    console.error("Error Logout", err);
+    return res.status(500).json({ error: "Internal Error while Logging Out" });
+  }
+});
 export default router;
