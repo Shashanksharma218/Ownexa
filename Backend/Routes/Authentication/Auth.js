@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+
+
 import CreateUser from "../../Database/Users/CreateUser.js";
 import LoginUser from "../../Database/Users/LoginUser.js";
-import cookieParser from "cookie-parser";
+import supabase from "../../Database/SupabaseClient.js";
+
 
 dotenv.config();
 const router = express.Router();
@@ -70,22 +74,31 @@ router.post("/auth/login", async (req, res) => {
 });
 
 
-router.get('/auth/logout', async (req, res) => {
+
+router.get("/auth/logout", async (req, res) => {
   try {
+    const token = req.cookies?.sb_token;
+    if (token) {
+      await supabase.auth.signOut({
+        accessToken: token
+      });
+    } 
     res.clearCookie("Ownexa_Token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      path: "/",
+      path: "/"
     });
 
     return res.status(200).json({
-      message: "Logout Successful",
-      success: true
+      message: "Logout successful"
     });
+
   } catch (err) {
-    console.error("Error Logout", err);
-    return res.status(500).json({ error: "Internal Error while Logging Out" });
+    console.error("Logout error:", err.message);
+    return res.status(500).json({
+      error: "Logout failed"
+    });
   }
 });
 export default router;
