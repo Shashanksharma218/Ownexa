@@ -254,14 +254,13 @@ contract PropertyToken is ERC1155, Ownable {
         emit TokensRedeemed(_propertyId, msg.sender, userBalance, payout);
     } 
 
-    function withdrawCommission(address payable _to) external onlyOwner {
-        require(_to != address(0), "Invalid address");
+    function withdrawCommission() external onlyOwner {
         require(accumulatedCommission > 0, "No commission to withdraw");
 
         uint256 amount = accumulatedCommission;
         accumulatedCommission = 0;
 
-        _to.transfer(amount);
+        payable(owner()).transfer(amount);
     }
     
 }
