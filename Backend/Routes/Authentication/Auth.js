@@ -105,7 +105,6 @@ router.get("/auth/logout", async (req, res) => {
 router.get("/auth/me", async (req, res) => {
   try {
     const token = req.cookies?.Ownexa_Token;
-    console.log(token);
     if (!token) {
       return res.status(401).json({
         loggedIn: false,
