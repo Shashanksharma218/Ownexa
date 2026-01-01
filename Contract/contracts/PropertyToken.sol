@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract PropertyToken is ERC1155, ERC1155Holder, Ownable {
+contract PropertyToken is ERC1155,  Ownable {
 
     // =========================
     // STRUCTS
@@ -61,7 +61,7 @@ contract PropertyToken is ERC1155, ERC1155Holder, Ownable {
     // CONSTRUCTOR
     // =========================
 
-    constructor() ERC1155("") Ownable(msg.sender) {}
+   constructor() ERC1155("") Ownable(msg.sender) {} 
 
     // =========================
     // PROPERTY LISTING (MINT)
@@ -264,12 +264,12 @@ contract PropertyToken is ERC1155, ERC1155Holder, Ownable {
         require(success4, "ETH transfer failed");
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC1155, ERC1155Holder)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
+   function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    override(ERC1155)
+    returns (bool)
+{
+    return super.supportsInterface(interfaceId);
+}
 }
