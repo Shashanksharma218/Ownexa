@@ -204,18 +204,24 @@ contract PropertyToken is ERC1155, ERC1155Holder, Ownable {
     // SETTLE PROPERTY
     // =========================
 
-    function settleProperty(uint256 _propertyId) external payable onlyOwner {
-        require(_propertyId < allProperty.length, "Invalid property");
-        require(allProperty[_propertyId].active, "Already settled");
-        require(msg.value > 0, "No ETH sent");
+   function settleProperty(uint256 _propertyId) external payable {
+    require(_propertyId < allProperty.length, "Invalid property");
+    require(allProperty[_propertyId].active, "Already settled");
+    require(!settled[_propertyId], "Already settled");
+    require(propertyLister[_propertyId] == msg.sender, "Not property owner");
 
-        allProperty[_propertyId].active = false;
-        settlementPool[_propertyId] = msg.value;
-        settled[_propertyId] = true;
+    uint256 minSettlement =
+        allProperty[_propertyId].tokensupply *
+        allProperty[_propertyId].pricepertoken;
 
-        emit PropertySettled(_propertyId, msg.value);
-    }
+    require(msg.value >= minSettlement, "Settlement too low");
 
+    allProperty[_propertyId].active = false;
+    settled[_propertyId] = true;
+    settlementPool[_propertyId] = msg.value;
+
+    emit PropertySettled(_propertyId, msg.value);
+} 
     // =========================
     // REDEEM TOKENS
     // =========================
