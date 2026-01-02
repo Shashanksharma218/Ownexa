@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+
 import Auth from "./Routes/Authentication/Auth.js";
+import FetchProperty from "./Routes/Property/FetchingProperty.js";
+import UpdateProperty from "./Routes/Property/UpdatingProperty.js";
 
 dotenv.config();
 
@@ -17,7 +20,10 @@ app.use(cors({
   credentials: true
 }));
 
+// ROUTES
 app.use("/", Auth);
+app.use("/", UpdateProperty);
+app.use("/", FetchProperty);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

@@ -1,13 +1,26 @@
 import supabase from "../../SupabaseClient.js";
+import { upload } from "../../../Middleware/Middleware.js";
+import { uploadFiles } from "./UploadFiles.js";
+const AddProperty = async (data, user, files) => {
 
-const AddProperty = async (data, user) => {
+   const propertyImageUrls = await uploadFiles(
+    files?.propertyImages,
+    "Property-Images"
+  );
+
+  const legalDocumentUrls = await uploadFiles(
+    files?.legalDocuments,
+    "Legal-Documents"
+  );
+  
   const { data: property, error } = await supabase
     .from("properties")
     .insert({
       owner_id: user.id,
       owner_email: user.email,
       owner_name: data.ownerName,
-
+      owner_accountaddress: data.accountaddress,
+      
       title: data.title,
       bhk: data.bhk,
       property_type: data.propertyType,
@@ -21,13 +34,13 @@ const AddProperty = async (data, user) => {
 
       registry_name: data.registryName,
       registry_number: data.registryNumber,
-      registration_date: data.registrationDate,
+      registration_date: data.registrationDate || null ,
 
-      expected_price_inr: data.expectedPriceINR,
+      price_per_token_inr: data.expectedPriceInr,
       token_name: data.tokenName,
 
-      property_images: data.propertyImages || [],
-      legal_documents: data.legalDocuments || [],
+      property_images: propertyImageUrls || [],
+      legal_documents: legalDocumentUrls || [],
 
       status: "pending"
     })

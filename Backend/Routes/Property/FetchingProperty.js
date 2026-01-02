@@ -1,5 +1,5 @@
 import express from "express";
-import { FindProperty, FindOneProperty } from "../../Database/Property/Get/FindProperty.js";
+import { FindProperty, FindOneProperty } from "../../Database/Property/Get/FindingProperty.js";
 
 const router = express.Router();
 
