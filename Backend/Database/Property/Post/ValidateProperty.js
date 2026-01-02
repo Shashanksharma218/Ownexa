@@ -1,22 +1,22 @@
 import supabase from "../../SupabaseClient.js";
 
 const ValidateProperty = async (data, adminUser) => {
-  if (!data.transactionHash) {
-    throw new Error("Minting not confirmed on blockchain");
+  if (!data.propertyId) {
+    throw new Error("Property ID is required");
   }
-  if (!data.priceINR || !data.tokenQuantity) {
+
+  if (!data.transactionHash || !data.blockchainId) {
+    throw new Error("Blockchain minting not confirmed");
+  }
+
+  if (!data.tokenQuantity || !data.pricePerTokenINR) {
     throw new Error("Invalid token economics");
   }
-
-  const pricePerTokenINR = Math.floor(
-    data.priceINR / data.tokenQuantity
-  );
-
   const { data: property, error } = await supabase
     .from("properties")
     .update({
-      launched_price_inr: data.priceINR,
-      price_per_token_inr: pricePerTokenINR,
+      launched_price_inr: data.launchedPriceINR,
+      price_per_token_inr: data.pricePerTokenINR ,
 
       token_name: data.tokenName,
       initial_token_quantity: data.tokenQuantity,
@@ -24,7 +24,7 @@ const ValidateProperty = async (data, adminUser) => {
 
       is_tokenized: true,
       transaction_hash: data.transactionHash,
-      blochainchain_id : data.BlochainchainId , 
+      blockchain_id : data.blockchainId , 
 
       validated_by: adminUser.id,
       validated_at: new Date(),

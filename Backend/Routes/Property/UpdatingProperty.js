@@ -28,7 +28,7 @@ router.post("/property/add", upload.fields([
 router.put("/property/validate", async (req, res) => {
   try {
     const user = await getAuthUser(req);
-    if (user.role !== "admin") {
+    if (user.email !== "dhruvnkejriwal@gmail.com") {
       return res.status(403).json({
         error: "Forbidden"
       });

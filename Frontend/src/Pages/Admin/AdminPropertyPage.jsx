@@ -1,0 +1,258 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
+
+import PropertyTokenABI from "../../abi/PropertyToken.json";
+import "../../Styles/Admin/AdminPropertyPage.css"
+
+const API = import.meta.env.VITE_API_BASE;
+const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
+
+export default function AdminPropertyPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [minting, setMinting] = useState(false);
+  const [error, setError] = useState("");
+
+  // Admin mint form
+  const [tokenName, setTokenName] = useState("");
+  const [tokenQuantity, setTokenQuantity] = useState("");
+  const [pricePerTokenINR, setPricePerTokenINR] = useState("");
+
+  /* ----------------------------------
+     FETCH PROPERTY
+  ---------------------------------- */
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const res = await fetch(`${API}/properties/${id}?status=pending&listed=false`, {
+          credentials: "include"
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch property");
+
+        const data = await res.json();
+        setProperty(data);
+        setTokenName(data.token_name || "");
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id]);
+
+  /* ----------------------------------
+     MINT + VALIDATE
+  ---------------------------------- */
+ const ETH_INR = 300000; // keep configurable
+
+const handleValidateAndMint = async () => {
+  try {
+    setMinting(true);
+    setError("");
+
+    if (!window.ethereum) {
+      throw new Error("MetaMask not found");
+    }
+
+    if (!tokenName || !tokenQuantity || !pricePerTokenINR) {
+      throw new Error("Fill all admin fields");
+    }
+
+    // ---- PRICE CONVERSION ----
+    const pricePerTokenETH =
+  (Number(pricePerTokenINR) / ETH_INR).toFixed(18);
+   const pricePerTokenWei = ethers.parseEther(pricePerTokenETH) 
+
+    /* ---- CONNECT WALLET ---- */
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      PropertyTokenABI,
+      signer
+    );
+
+    /* ---- MINT ---- */
+      const tx = await contract.listProperty(
+      property.owner_accountaddress , 
+      BigInt(tokenQuantity),
+      pricePerTokenWei,
+      tokenName,
+    );
+
+    const receipt = await tx.wait();
+
+    /* ---- EXTRACT BLOCKCHAIN ID ---- */
+    let blockchainId = null;
+    for (const log of receipt.logs) {
+      try {
+        const parsed = contract.interface.parseLog(log);
+        if (parsed?.name === "PropertyListed") {
+          blockchainId = parsed.args.propertyId.toString();
+        }
+      } catch (err) { console.log(err);  }
+    }
+
+    if (!blockchainId) {
+      throw new Error("Blockchain ID not found in events");
+    }
+
+    /* ---- BACKEND UPDATE ---- */
+    const res = await fetch(`${API}/property/validate`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        propertyId: property.id,
+        blockchainId,
+        transactionHash: receipt.hash,
+        tokenName,
+        tokenQuantity: Number(tokenQuantity),
+        pricePerTokenINR: Number(pricePerTokenINR),
+        launchedPriceINR:
+          Number(pricePerTokenINR) * Number(tokenQuantity)
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Validation failed");
+    }
+
+    alert("Property validated & minted successfully");
+    navigate("/AdminViewPage");
+
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setMinting(false);
+  }
+};
+
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
+  if (!property) return null;
+
+  return (
+    <div className="property-page">
+      <div className="property-container">
+
+        {/* HEADER */}
+        <div className="property-header">
+          <h2>{property.title}</h2>
+          <span className="status-badge pending">
+            {property.status.toUpperCase()}
+          </span>
+        </div>
+
+        {/* LAYOUT */}
+        <div className="property-layout">
+
+          {/* LEFT (35%) */}
+          <div className="property-left">
+            <InfoCard title="Property Details">
+              <p>{property.bhk} BHK • {property.property_type}</p>
+              <p>{property.built_up_area_sqft} sqft</p>
+            </InfoCard>
+
+            <InfoCard title="Address">
+              <p>{property.address_line}</p>
+              <p>{property.city}, {property.state} - {property.pincode}</p>
+            </InfoCard>
+
+            <InfoCard title="Owner Info">
+              <p>{property.owner_name}</p>
+              <p className="muted">
+                {property.owner_accountaddress.slice(0, 6)}...
+                {property.owner_accountaddress.slice(-4)}
+              </p>
+            </InfoCard>
+
+            <InfoCard title="Registry">
+              <p>{property.registry_name}</p>
+              <p>{property.registry_number}</p>
+              <p>{property.registration_date}</p>
+            </InfoCard>
+
+            <InfoCard title="Token (User Expectation)">
+              <p>{property.token_name}</p>
+              <p>Expected: ₹{property.price_per_token_inr}</p>
+            </InfoCard>
+          </div>
+
+          {/* RIGHT (65%) */}
+          <div className="property-right">
+
+            <InfoCard title="Property Images">
+              <div className="image-grid">
+                {property.property_images.map((img, i) => (
+                  <img key={i} src={img} alt="property" />
+                ))}
+              </div>
+            </InfoCard>
+
+            <InfoCard title="Legal Documents">
+              {property.legal_documents.map((doc, i) => (
+                <a key={i} href={doc} target="_blank" rel="noreferrer">
+                  📄 {doc.split("/").pop()}
+                </a>
+              ))}
+            </InfoCard>
+
+            {property.status === "pending" && (
+              <InfoCard title="Admin – Validate & Mint">
+                <input
+                  placeholder="Token Name"
+                  value={tokenName}
+                  onChange={(e) => setTokenName(e.target.value)}
+                />
+
+                <input
+                  placeholder="Token Quantity"
+                  type="number"
+                  value={tokenQuantity}
+                  onChange={(e) => setTokenQuantity(e.target.value)}
+                />
+
+                <input
+                  placeholder="Price Per Token (INR)"
+                  type="number"
+                  value={pricePerTokenINR}
+                  onChange={(e) => setPricePerTokenINR(e.target.value)}
+                />
+
+                <button
+                  disabled={minting}
+                  onClick={handleValidateAndMint}
+                >
+                  {minting ? "Minting..." : "Validate & Mint"}
+                </button>
+              </InfoCard>
+            )}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ----------------------------------
+   REUSABLE CARD
+---------------------------------- */
+function InfoCard({ title, children }) {
+  return (
+    <div className="preview-card">
+      <div className="preview-label">{title}</div>
+      {children}
+    </div>
+  );
+}

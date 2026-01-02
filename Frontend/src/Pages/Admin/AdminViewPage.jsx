@@ -49,7 +49,7 @@ export default function AdminViewPage() {
             <div
               key={property.id}
               className="admin-property-card"
-              onClick={() => navigate(`/admin/property/${property.id}`)}
+              onClick={() => navigate(`/AdminProperty/${property.id}`)}
             >
               {/* HEADER */}
               <div className="card-header">
