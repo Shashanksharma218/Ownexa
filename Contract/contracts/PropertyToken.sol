@@ -66,6 +66,7 @@ contract PropertyToken is ERC1155,ERC1155Holder, Ownable {
     // =========================
 
     function listProperty(
+        address lister , 
         uint256 _tokensupply,
         uint256 _pricepertoken,
         string memory _tokename 
@@ -83,10 +84,10 @@ contract PropertyToken is ERC1155,ERC1155Holder, Ownable {
                 active: true
             })
         );
-        propertyLister[propertyId] = msg.sender;
+        propertyLister[propertyId] = lister;
         _mint(address(this), propertyId, _tokensupply, "");
         primaryRemaining[propertyId] = _tokensupply;
-        emit PropertyListed(propertyId, msg.sender, _tokensupply, _pricepertoken);
+        emit PropertyListed(propertyId, lister, _tokensupply, _pricepertoken);
     }
 
     // =========================
