@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import Auth from "./Routes/Authentication/Auth.js";
 import FetchProperty from "./Routes/Property/FetchingProperty.js";
 import UpdateProperty from "./Routes/Property/UpdatingProperty.js";
-
+import PrimaryTransaction from "./Routes/Transactions/PrimaryTransactions.js"
 dotenv.config();
 
 const app = express();
@@ -24,6 +24,7 @@ app.use(cors({
 app.use("/", Auth);
 app.use("/", UpdateProperty);
 app.use("/", FetchProperty);
+app.use("/", PrimaryTransaction);  
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

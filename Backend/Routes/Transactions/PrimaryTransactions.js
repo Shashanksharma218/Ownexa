@@ -2,6 +2,7 @@ import express from "express";
 import { getAuthUser } from "../../Middleware/Middleware.js";
 import PrimaryTransaction from "../../Database/Transactions/Post/PrimaryTransaction.js";
 import FindTransactions from "../../Database/Transactions/Get/FindTransactions.js";
+import Holdings from "../../Database/Investments/Post/Holdings.js";
 
 const router = express.Router();
 
@@ -15,10 +16,8 @@ router.post("/transaction", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const transactionData = req.body;
-    const transaction = await PrimaryTransaction(
-      transactionData,
-      user
-    );
+    const transaction = await PrimaryTransaction( transactionData,  user  ); 
+    const holding = await Holdings(transactionData, user); 
     return res.status(201).json({
       message: "Transaction successful",
       transaction

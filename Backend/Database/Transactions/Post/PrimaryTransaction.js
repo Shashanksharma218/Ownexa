@@ -11,11 +11,9 @@ const PrimaryTransaction = async (data, user) => {
       property_id: data.propertyId,
       buyer_id: user.id,
       buyer_address: data.accountaddress.toLowerCase(),
-
       token_quantity: data.tokenQuantity,
       token_name: data.tokenName,
       price_per_token_inr: data.pricePerTokenInr,
-
       transaction_hash: data.transactionhash,
       status: data.status , 
     })
