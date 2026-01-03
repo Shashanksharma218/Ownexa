@@ -7,6 +7,7 @@ import Auth from "./Routes/Authentication/Auth.js";
 import FetchProperty from "./Routes/Property/FetchingProperty.js";
 import UpdateProperty from "./Routes/Property/UpdatingProperty.js";
 import PrimaryTransaction from "./Routes/Transactions/PrimaryTransactions.js"
+import Holdings from "./Routes/Holdings/Holding.js"
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/", Auth);
 app.use("/", UpdateProperty);
 app.use("/", FetchProperty);
 app.use("/", PrimaryTransaction);  
+app.use("/", Holdings);  
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
