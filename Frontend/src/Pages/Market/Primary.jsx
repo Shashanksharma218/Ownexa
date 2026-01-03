@@ -46,36 +46,52 @@ export default function PrimaryMarket() {
       ) : (
         <div className="admin-card-grid">
           {properties.map((property) => (
-            <div
-              key={property.id}
-              className="admin-property-card"
-              onClick={() => navigate(`/Property/${property.id}`)}
-            >
-              {/* HEADER */}
-              <div className="card-header">
-                <h3 className="property-title">{property.title}</h3>
-                <span className="status-badge validated">Validated</span>
-              </div>
+         <div
+  key={property.id}
+  className="admin-property-card"
+  onClick={() => navigate(`/Property/${property.id}`)}
+>
+  <div className="card-horizontal">
 
-              {/* BODY */}
-              <div className="card-body">
-                <p>
-                  <span>Token Name :</span> {property.token_name}
-                </p>
-                <p>
-                  <span>Token Price :</span> {property.price_per_token_inr}
-                </p>
-              </div>
+    {/* LEFT IMAGE */}
+    <div className="card-image-left">
+      <img
+        src={property.property_images?.[0] || "/placeholder-property.jpg"}
+        alt={property.title}
+      />
+    </div>
 
-              {/* FOOTER */}
-              <div className="card-footer">
-                <span className="submitted-date">
-                  Validated:{" "}
-                  {new Date(property.validated_at).toLocaleDateString()}
-                </span>
-                <span className="review-arrow">→</span>
-              </div>
-            </div>
+    {/* RIGHT CONTENT (your existing design) */}
+    <div className="card-content-right">
+
+      {/* HEADER */}
+      <div className="card-header">
+        <h3 className="property-title">{property.title}</h3>
+        <span className="status-badge validated">Validated</span>
+      </div>
+
+      {/* BODY */}
+      <div className="card-body">
+        <p>
+          <span>Token Name :</span> {property.token_name}
+        </p>
+        <p>
+          <span>Token Price :</span> ₹{property.price_per_token_inr}
+        </p>
+      </div>
+
+      {/* FOOTER */}
+      <div className="card-footer">
+        <span className="submitted-date">
+          Validated:{" "}
+          {new Date(property.validated_at).toLocaleDateString()}
+        </span>
+        <span className="review-arrow">→</span>
+      </div>
+
+    </div>
+  </div>
+</div>
           ))}
         </div>
       )}

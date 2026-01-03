@@ -4,3 +4,44 @@
   color: #1ad04a;
 }
 
+/* ================================
+   HORIZONTAL CARD LAYOUT
+================================ */
+.card-horizontal {
+  display: flex;
+  gap: 14px;
+}
+
+/* LEFT IMAGE */
+.card-image-left {
+  width: 110px;
+  height: 100%;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0f0f11;
+}
+
+.card-image-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* RIGHT CONTENT */
+.card-content-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title width adjustment */
+.property-title {
+  max-width: 85%;
+}
+
+/* Hover polish */
+.admin-property-card:hover .card-image-left img {
+  transform: scale(1.05);
+  transition: transform 0.25s ease;
+}
