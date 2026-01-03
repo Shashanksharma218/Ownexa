@@ -1,12 +1,12 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { ethers } from "ethers";
 import "../../Styles/Forms/AddProperty.css";
 
-const API = import.meta.env.VITE_API_BASE; 
+const API = import.meta.env.VITE_API_BASE;
 export default function AddProperty() {
   const [walletAddress, setWalletAddress] = useState("");
   const [loading, setLoading] = useState(false);
-    
+
   const [form, setForm] = useState({
     ownerName: "",
     title: "",
@@ -32,19 +32,19 @@ export default function AddProperty() {
 
   // 🔐 CONNECT WALLET
   const connectWallet = async () => {
-  try {
-    if (!window.ethereum) {
-      alert("MetaMask not found");
-      return;
-    }
+    try {
+      if (!window.ethereum) {
+        alert("MetaMask not found");
+        return;
+      }
 
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const accounts = await provider.send("eth_requestAccounts", []);
-    setWalletAddress(accounts[0]);
-  } catch (err) {
-    alert("Wallet connection failed" , err );
-  }
-};
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      setWalletAddress(accounts[0]);
+    } catch (err) {
+      alert("Wallet connection failed", err);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -74,7 +74,7 @@ export default function AddProperty() {
         {
           method: "POST",
           credentials: "include",
-          body: formData 
+          body: formData
         }
       );
 
@@ -98,14 +98,14 @@ export default function AddProperty() {
         <form className="form-grid" onSubmit={handleSubmit}>
           <input
             className="full"
-            name="ownerName" 
+            name="ownerName"
             placeholder="Owner Name"
             onChange={handleChange}
             required
           />
 
           {/* WALLET (READ ONLY) */}
-    
+
 
           <input name="title" placeholder="Property Title" onChange={handleChange} required />
           <input name="bhk" placeholder="BHK" onChange={handleChange} required />
@@ -151,37 +151,37 @@ export default function AddProperty() {
             required
           />
 
-       <div className="full wallet-actions">
-  {!walletAddress ? (
-    <button
-      type="button"
-      className="wallet-btn"
-      onClick={connectWallet}
-    >
-      🔗 Connect Wallet
-    </button>
-  ) : (
-    <div className="wallet-connected">
-      ✅ Connected: {walletAddress.slice(0, 6)}...
-      {walletAddress.slice(-4)}
-    </div>
-  )}
+          <div className="full wallet-actions">
+            {!walletAddress ? (
+              <button
+                type="button"
+                className="wallet-btn"
+                onClick={connectWallet}
+              >
+                🔗 Connect Wallet
+              </button>
+            ) : (
+              <div className="wallet-connected">
+                ✅ Connected: {walletAddress.slice(0, 6)}...
+                {walletAddress.slice(-4)}
+              </div>
+            )}
 
-  <button 
-    type="submit"
-              disabled={loading || !walletAddress} 
+            <button
+              type="submit"
+              disabled={loading || !walletAddress}
               className="SubmitBtn"
-  >
-    {loading ? "Submitting..." : "Submit for Validation"}
-  </button>
-</div>
+            >
+              {loading ? "Submitting..." : "Submit for Validation"}
+            </button>
+          </div>
         </form>
       </div>
 
       {/* RIGHT PANEL */}
       <div className="preview-panel">
         <h2>Live Preview</h2>
- <PreviewItem label="Wallet Address" value={walletAddress} />
+        <PreviewItem label="Wallet Address" value={walletAddress} />
         <PreviewItem label="Owner Name" value={form.ownerName} />
 
 

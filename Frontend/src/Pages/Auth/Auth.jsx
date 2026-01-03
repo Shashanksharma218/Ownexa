@@ -58,14 +58,14 @@ const AuthPage = () => {
 
       const payload = isSignUp
         ? {
-            Username: formData.Username,
-            Email: formData.Email,
-            Password: formData.Password,
-          }
+          Username: formData.Username,
+          Email: formData.Email,
+          Password: formData.Password,
+        }
         : {
-            Email: formData.Email,
-            Password: formData.Password,
-          };
+          Email: formData.Email,
+          Password: formData.Password,
+        };
 
       const res = await fetch(`${API}${endpoint}`, {
         method: "POST",
@@ -152,8 +152,8 @@ const AuthPage = () => {
                   ? "Creating account..."
                   : "Logging in..."
                 : isSignUp
-                ? "Create Account"
-                : "Login"}
+                  ? "Create Account"
+                  : "Login"}
             </button>
 
             <button

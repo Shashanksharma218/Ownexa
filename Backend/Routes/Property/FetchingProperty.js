@@ -43,7 +43,7 @@ router.get("/properties/:id", async (req, res) => {
     console.error("Error fetching property:", err.message);
     return res.status(400).json({ error: err.message });
   }
-}); 
+});
 
 
 

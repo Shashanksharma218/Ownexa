@@ -3,7 +3,7 @@ import supabase from "../../SupabaseClient.js";
 const FindProperty = async (status, listing) => {
   if (status === undefined || listing === undefined) {
     throw new Error("Status and listing flag are required");
-  } 
+  }
   const { data, error } = await supabase
     .from("properties")
     .select("*")

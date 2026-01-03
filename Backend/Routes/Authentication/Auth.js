@@ -37,7 +37,7 @@ router.post("/auth/signup", async (req, res) => {
       error: err.message
     });
   }
-}); 
+});
 
 
 router.post("/auth/login", async (req, res) => {
@@ -81,7 +81,7 @@ router.get("/auth/logout", async (req, res) => {
       await supabase.auth.signOut({
         accessToken: token
       });
-    } 
+    }
     res.clearCookie("Ownexa_Token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -134,7 +134,7 @@ router.get("/auth/me", async (req, res) => {
       error: "Something went wrong"
     });
   }
-}); 
+});
 
 
 export default router;

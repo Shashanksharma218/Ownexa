@@ -4,11 +4,6 @@ const ValidateProperty = async (data, adminUser) => {
   if (!data.propertyId) {
     throw new Error("Property ID is required");
   }
-
-  if (!data.transactionHash || !data.blockchainId) {
-    throw new Error("Blockchain minting not confirmed");
-  }
-
   if (!data.tokenQuantity || !data.pricePerTokenINR) {
     throw new Error("Invalid token economics");
   }
@@ -16,7 +11,7 @@ const ValidateProperty = async (data, adminUser) => {
     .from("properties")
     .update({
       launched_price_inr: data.launchedPriceINR,
-      price_per_token_inr: data.pricePerTokenINR ,
+      price_per_token_inr: data.pricePerTokenINR,
 
       token_name: data.tokenName,
       initial_token_quantity: data.tokenQuantity,
@@ -24,13 +19,15 @@ const ValidateProperty = async (data, adminUser) => {
 
       is_tokenized: true,
       transaction_hash: data.transactionHash,
-      blockchain_id : data.blockchainId , 
+      blockchain_id: data.blockchainId,
 
       validated_by: adminUser.id,
       validated_at: new Date(),
 
-      status: "validated",
-      is_listed: true
+
+      admin_review: data.adminreview,
+      status: data.status,
+      is_listed: data.listing
     })
     .eq("id", data.propertyId)
     .select()
@@ -38,6 +35,6 @@ const ValidateProperty = async (data, adminUser) => {
 
   if (error) throw error;
   return property;
-}; 
+};
 
 export default ValidateProperty; 

@@ -4,7 +4,9 @@
   box-sizing: border-box;
 }
 
-body, html, #root {
+body,
+html,
+#root {
   height: 100%;
   width: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -75,7 +77,7 @@ body, html, #root {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
 
 .form-box h3 {
@@ -96,11 +98,9 @@ body, html, #root {
   width: 36px;
   height: 2px;
 
-  background: linear-gradient(
-    to right,
-    #facc15,
-    transparent
-  );
+  background: linear-gradient(to right,
+      #facc15,
+      transparent);
 
   margin: 10px auto 0;
 }
@@ -110,6 +110,7 @@ body, html, #root {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -144,9 +145,11 @@ body, html, #root {
 .Login-btn:hover {
   background-color: #0056b3;
 }
-.Login-btn{
-    background-color: #5dabff;
+
+.Login-btn {
+  background-color: #5dabff;
 }
+
 .toggle-btn {
   background: none;
   color: #ccc;
@@ -154,9 +157,11 @@ body, html, #root {
   font-size: 0.9rem;
   cursor: pointer;
 }
-.toggle-btn:hover{
-    color: #0b9812;
+
+.toggle-btn:hover {
+  color: #0b9812;
 }
+
 /* =========================
    BRAND BLOCK (LEFT SIDE)
 ========================= */
@@ -165,7 +170,8 @@ body, html, #root {
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* LEFT ORIENTED TEXT */
+  align-items: flex-start;
+  /* LEFT ORIENTED TEXT */
   justify-content: center;
 
   gap: 4px;
@@ -186,7 +192,8 @@ body, html, #root {
 
 /* EXA (ACCENT) */
 .brand-exa {
-  color: #0eaaed; /* gold tone */
+  color: #0eaaed;
+  /* gold tone */
   margin-left: 4px;
 }
 
@@ -194,12 +201,13 @@ body, html, #root {
 .brand-tagline {
   font-size: 1.25rem;
   line-height: 1.45;
-   margin-left: 4px ;
+  margin-left: 4px;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 400;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 👈 LEFT EDGE SAME FOR BOTH LINES */
+  align-items: flex-start;
+  /* 👈 LEFT EDGE SAME FOR BOTH LINES */
 }
 
 .brand-tagline span {
@@ -214,7 +222,8 @@ body, html, #root {
   }
 
   .left-side {
-    display: none; /* hide branding on small screens */
+    display: none;
+    /* hide branding on small screens */
   }
 
   .right-side {
@@ -245,7 +254,7 @@ body, html, #root {
   .toggle-btn {
     font-size: 0.85rem;
   }
-} 
+}
 
 
 @media (max-width: 480px) {

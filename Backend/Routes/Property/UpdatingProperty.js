@@ -1,19 +1,19 @@
 import express from "express";
 import AddProperty from "../../Database/Property/Post/AddProperty.js";
-import {getAuthUser , upload} from "../../Middleware/Middleware.js";
+import { getAuthUser, upload } from "../../Middleware/Middleware.js";
 import ValidateProperty from "../../Database/Property/Post/ValidateProperty.js";
 
 const router = express.Router();
 
 router.post("/property/add", upload.fields([
-    { name: "propertyImages", maxCount: 10 },
-    { name: "legalDocuments", maxCount: 10 }
-  ]), async (req, res) => {
+  { name: "propertyImages", maxCount: 10 },
+  { name: "legalDocuments", maxCount: 10 }
+]), async (req, res) => {
   try {
     const user = await getAuthUser(req);
     const propertyData = req.body;
-    const files = req.files;  
-    await AddProperty(propertyData, user ,files );
+    const files = req.files;
+    await AddProperty(propertyData, user, files);
     return res.status(201).json({
       message: "Property added successfully"
     });

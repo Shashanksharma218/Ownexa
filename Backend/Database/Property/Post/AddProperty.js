@@ -3,7 +3,7 @@ import { upload } from "../../../Middleware/Middleware.js";
 import { uploadFiles } from "./UploadFiles.js";
 const AddProperty = async (data, user, files) => {
 
-   const propertyImageUrls = await uploadFiles(
+  const propertyImageUrls = await uploadFiles(
     files?.propertyImages,
     "Property-Images"
   );
@@ -12,7 +12,7 @@ const AddProperty = async (data, user, files) => {
     files?.legalDocuments,
     "Legal-Documents"
   );
-  
+
   const { data: property, error } = await supabase
     .from("properties")
     .insert({
@@ -20,7 +20,7 @@ const AddProperty = async (data, user, files) => {
       owner_email: user.email,
       owner_name: data.ownerName,
       owner_accountaddress: data.accountaddress,
-      
+
       title: data.title,
       bhk: data.bhk,
       property_type: data.propertyType,
@@ -34,7 +34,7 @@ const AddProperty = async (data, user, files) => {
 
       registry_name: data.registryName,
       registry_number: data.registryNumber,
-      registration_date: data.registrationDate || null ,
+      registration_date: data.registrationDate || null,
 
       price_per_token_inr: data.expectedPriceInr,
       token_name: data.tokenName,
@@ -43,14 +43,14 @@ const AddProperty = async (data, user, files) => {
       legal_documents: legalDocumentUrls || [],
 
       status: "pending",
-      blockchain_id : null 
+      blockchain_id: null
     })
     .select()
     .single();
 
   if (error) throw error;
   return property;
-}; 
+};
 
 
 export default AddProperty;

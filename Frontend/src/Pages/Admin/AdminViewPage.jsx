@@ -17,7 +17,7 @@ export default function AdminViewPage() {
           { credentials: "include" }
         );
         if (!res.ok) throw new Error("Failed to fetch properties");
-        const data = await res.json(); 
+        const data = await res.json();
         // earliest first
         const sorted = data.sort(
           (a, b) => new Date(a.created_at) - new Date(b.created_at)

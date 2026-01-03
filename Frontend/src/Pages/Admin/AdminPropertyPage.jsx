@@ -21,7 +21,7 @@ export default function AdminPropertyPage() {
   const [tokenName, setTokenName] = useState("");
   const [tokenQuantity, setTokenQuantity] = useState("");
   const [pricePerTokenINR, setPricePerTokenINR] = useState("");
-
+  const [adminreview, setadminreview] = useState("");
   /* ----------------------------------
      FETCH PROPERTY
   ---------------------------------- */
@@ -50,92 +50,128 @@ export default function AdminPropertyPage() {
   /* ----------------------------------
      MINT + VALIDATE
   ---------------------------------- */
- const ETH_INR = 300000; // keep configurable
+  const ETH_INR = 300000; // keep configurable
+  const handleRejectProperty = async () => {
+    try {
+      if (!adminreview.trim()) {
+        throw new Error("Admin review is required for rejection");
+      }
 
-const handleValidateAndMint = async () => {
-  try {
-    setMinting(true);
-    setError("");
+      const rejectres = await fetch(`${API}/property/validate`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property.id,
+          tokenName,
+          adminreview,
+          status: "Rejected",
+          listing: false,
+          tokenQuantity: 0,
+          pricePerTokenINR: 0,
+          launchedPriceINR:
+            Number(pricePerTokenINR || 0) * Number(tokenQuantity || 0)
+        })
+      });
 
-    if (!window.ethereum) {
-      throw new Error("MetaMask not found");
+      if (!rejectres.ok) {
+        const err = await rejectres.json();
+        throw new Error(err.error || "Rejection failed");
+      }
+
+      navigate("/AdminViewPage");
+
+    } catch (err) {
+      setError(err.message);
     }
+  };
+  const handleValidateAndMint = async () => {
+    try {
+      setMinting(true);
+      setError("");
 
-    if (!tokenName || !tokenQuantity || !pricePerTokenINR) {
-      throw new Error("Fill all admin fields");
-    }
+      if (!window.ethereum) {
+        throw new Error("MetaMask not found");
+      }
 
-    // ---- PRICE CONVERSION ----
-    const pricePerTokenETH =
-  (Number(pricePerTokenINR) / ETH_INR).toFixed(18);
-   const pricePerTokenWei = ethers.parseEther(pricePerTokenETH) 
+      if (!tokenName || !tokenQuantity || !pricePerTokenINR) {
+        throw new Error("Fill all admin fields");
+      }
 
-    /* ---- CONNECT WALLET ---- */
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
+      // ---- PRICE CONVERSION ----
+      const pricePerTokenETH =
+        (Number(pricePerTokenINR) / ETH_INR).toFixed(18);
+      const pricePerTokenWei = ethers.parseEther(pricePerTokenETH)
 
-    const contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      PropertyTokenABI,
-      signer
-    );
+      /* ---- CONNECT WALLET ---- */
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
 
-    /* ---- MINT ---- */
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        PropertyTokenABI,
+        signer
+      );
+
+      /* ---- MINT ---- */
       const tx = await contract.listProperty(
-      property.owner_accountaddress , 
-      BigInt(tokenQuantity),
-      pricePerTokenWei,
-      tokenName,
-    );
-
-    const receipt = await tx.wait();
-
-    /* ---- EXTRACT BLOCKCHAIN ID ---- */
-    let blockchainId = null;
-    for (const log of receipt.logs) {
-      try {
-        const parsed = contract.interface.parseLog(log);
-        if (parsed?.name === "PropertyListed") {
-          blockchainId = parsed.args.propertyId.toString();
-        }
-      } catch (err) { console.log(err);  }
-    }
-
-    if (!blockchainId) {
-      throw new Error("Blockchain ID not found in events");
-    }
-
-    /* ---- BACKEND UPDATE ---- */
-    const res = await fetch(`${API}/property/validate`, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        propertyId: property.id,
-        blockchainId,
-        transactionHash: receipt.hash,
+        property.owner_accountaddress,
+        BigInt(tokenQuantity),
+        pricePerTokenWei,
         tokenName,
-        tokenQuantity: Number(tokenQuantity),
-        pricePerTokenINR: Number(pricePerTokenINR),
-        launchedPriceINR:
-          Number(pricePerTokenINR) * Number(tokenQuantity)
-      })
-    });
+      );
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || "Validation failed");
+      const receipt = await tx.wait();
+
+      /* ---- EXTRACT BLOCKCHAIN ID ---- */
+      let blockchainId = null;
+      for (const log of receipt.logs) {
+        try {
+          const parsed = contract.interface.parseLog(log);
+          if (parsed?.name === "PropertyListed") {
+            blockchainId = parsed.args.propertyId.toString();
+          }
+        } catch (err) { console.log(err); }
+      }
+
+      if (!blockchainId) {
+        throw new Error("Blockchain ID not found in events");
+      }
+
+      /* ---- BACKEND UPDATE ---- */
+      const res = await fetch(`${API}/property/validate`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property.id,
+          blockchainId,
+          transactionHash: receipt.hash,
+          tokenName,
+          adminreview,
+          status: "Validated",  // ✅ explicit
+          listing: true,        // ✅ explicit
+          tokenQuantity: Number(tokenQuantity),
+          pricePerTokenINR: Number(pricePerTokenINR),
+          launchedPriceINR:
+            Number(pricePerTokenINR) * Number(tokenQuantity)
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Validation failed");
+      }
+
+      alert("Property validated & minted successfully");
+      navigate("/AdminViewPage");
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setMinting(false);
     }
-
-    alert("Property validated & minted successfully");
-    navigate("/AdminViewPage");
-
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setMinting(false);
-  }
-};
+  };
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -209,32 +245,63 @@ const handleValidateAndMint = async () => {
 
             {property.status === "pending" && (
               <InfoCard title="Admin – Validate & Mint">
-                <input
-                  placeholder="Token Name"
-                  value={tokenName}
-                  onChange={(e) => setTokenName(e.target.value)}
-                />
 
-                <input
-                  placeholder="Token Quantity"
-                  type="number"
-                  value={tokenQuantity}
-                  onChange={(e) => setTokenQuantity(e.target.value)}
-                />
+                <div className="admin-form-row">
 
-                <input
-                  placeholder="Price Per Token (INR)"
-                  type="number"
-                  value={pricePerTokenINR}
-                  onChange={(e) => setPricePerTokenINR(e.target.value)}
-                />
+                  {/* LEFT: stacked token fields */}
+                  <div className="token-fields-vertical">
+                    <input
+                      placeholder="Token Name"
+                      value={tokenName}
+                      onChange={(e) => setTokenName(e.target.value)}
+                    />
 
-                <button
-                  disabled={minting}
-                  onClick={handleValidateAndMint}
-                >
-                  {minting ? "Minting..." : "Validate & Mint"}
-                </button>
+                    <input
+                      placeholder="Token Quantity"
+                      type="number"
+                      value={tokenQuantity}
+                      onChange={(e) => setTokenQuantity(e.target.value)}
+                    />
+
+                    <input
+                      placeholder="Price Per Token (INR)"
+                      type="number"
+                      value={pricePerTokenINR}
+                      onChange={(e) => setPricePerTokenINR(e.target.value)}
+                    />
+                  </div>
+
+                  {/* RIGHT: admin review */}
+                  <div className="admin-review-field">
+                    <textarea
+                      placeholder="Admin review (verification / rejection notes)"
+                      value={adminreview}
+                      onChange={(e) => setadminreview(e.target.value)}
+                      rows={6}
+                    />
+                  </div>
+
+                </div>
+
+                {/* ACTION BUTTONS */}
+                <div className="action-row">
+                  <button
+                    className="mint-btn"
+                    disabled={minting}
+                    onClick={handleValidateAndMint}
+                  >
+                    {minting ? "Minting on Blockchain..." : "Validate & Mint"}
+                  </button>
+
+                  <button
+                    className="reject-btn"
+                    disabled={minting}
+                    onClick={handleRejectProperty}
+                  >
+                    Reject
+                  </button>
+                </div>
+
               </InfoCard>
             )}
 
