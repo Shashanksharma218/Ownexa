@@ -20,6 +20,7 @@ const Holdings = async (data, user) => {
     .select("id, token_quantity, avg_price_inr")
     .eq("wallet_address", wallet)
     .eq("property_id", propertyId)
+    .eq("user_id" , user.id)
     .single();
 
   if (fetchError && fetchError.code !== "PGRST116") {
