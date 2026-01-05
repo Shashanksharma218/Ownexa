@@ -3,8 +3,7 @@ import supabase from "../../SupabaseClient.js";
 const PrimaryTransaction = async (data, user) => {
   if (!user?.id) {
     throw new Error("Unauthorized: User not found");
-  }
-
+  }  
   const { data: transaction, error } = await supabase
     .from("primary_transactions")
     .insert({

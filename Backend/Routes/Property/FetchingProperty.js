@@ -1,5 +1,6 @@
 import express from "express";
-import { FindProperty, FindOneProperty } from "../../Database/Property/Get/FindingProperty.js";
+import { FindProperty, FindOneProperty, FindingProperties } from "../../Database/Property/Get/FindingProperty.js";
+import { getAuthUser } from "../../Middleware/Middleware.js";
 
 const router = express.Router();
 
@@ -41,6 +42,19 @@ router.get("/properties/:id", async (req, res) => {
 
   } catch (err) {
     console.error("Error fetching property:", err.message);
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+
+router.get("/userproperties", async (req, res) => {
+  try {
+     const user = await getAuthUser(req);
+    const property = await FindingProperties(user.id);
+    return res.status(200).json(property);
+
+  } catch (err) {
+    console.error("Error fetching properties:", err.message);
     return res.status(400).json({ error: err.message });
   }
 });

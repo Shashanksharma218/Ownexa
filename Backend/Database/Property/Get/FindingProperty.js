@@ -31,4 +31,14 @@ const FindOneProperty = async (propertyId, status, listing) => {
   return data;
 };
 
-export { FindProperty, FindOneProperty };
+
+const FindingProperties = async (userId) => {
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq("owner_id", userId)
+
+  if (error) throw error;
+  return data;
+};
+export { FindProperty, FindOneProperty  , FindingProperties};
