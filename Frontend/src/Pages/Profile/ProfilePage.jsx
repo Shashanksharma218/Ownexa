@@ -191,9 +191,36 @@ const [recent, setRecent] = useState([]);
           </section>
 
           {/* CARD 3 */}
-          <section className="card">
-            <h3>Properties Listed</h3>
-            <p>{listedProperties.length}</p>
+          <section className="card-property">
+             <div className="card-header">
+    <h3>Listed Properties</h3>
+    <span className="card-subtle">
+      {listedProperties.length} active
+    </span>
+  </div>
+
+  {listedProperties.length === 0 ? (
+    <p className="empty-text">No properties listed yet</p>
+  ) : (
+    <ul className="property-preview-list">
+      {listedProperties.slice(0, 1).map((p) => (
+        <li key={p.id}>
+          <div className="property-left">
+            <span className="property-title">{p.title}</span>
+            <span className="property-location">
+              {p.city}, {p.state}
+            </span>
+          </div>
+
+          <span className="property-status listed">
+            LISTED
+          </span>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <span className="view-hint">View all properties</span>
           </section>
 
           {/* CARD 4 */}
