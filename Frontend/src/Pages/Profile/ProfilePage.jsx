@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../../Components/Dashboard/Sidebar";
 import "../../Styles/Profile/ProfilePage.css"
 import avatar1 from "../../assets/avatar1.png";
 import avatar2 from "../../assets/avatar2.png";
@@ -22,7 +21,6 @@ const avatars = [
 ];
 
 export default function ProfilePage() {
-  const [active, setActive] = useState("profile");
   const [loading, setLoading] = useState(true);
 
   const [user, setUser] = useState(null);
@@ -45,13 +43,13 @@ export default function ProfilePage() {
         if (!userRes.ok) throw new Error("Auth failed");
 
         const userData = await userRes.json();
-        setUser(userData);
-
+        setUser(userData.user);
+        
         // 2️⃣ DEPENDENT DATA
         const [propertyRes, transactionRes, holdingRes] =
           await Promise.all([
             fetch(`${API}/userproperties`, { credentials: "include" }),
-            fetch(`${API}/transaction`, { credentials: "include" }),
+            fetch(`${API}/transaction?status=SUCCESS`, { credentials: "include" }),
             fetch(`${API}/holdings`, { credentials: "include" }),
           ]);
 
@@ -62,10 +60,11 @@ export default function ProfilePage() {
         const p = Array.isArray(propertyData) ? propertyData : [];
         const t = Array.isArray(transactionData) ? transactionData : [];
         const h = Array.isArray(holdingData) ? holdingData : [];
-
+         
         setListedProperties(p);
         setTransactions(t);
-        setHoldings(h);
+          setHoldings(h);
+
 
         // 3️⃣ RECENT ACTIVITY
         const allActivity = t
@@ -96,35 +95,32 @@ export default function ProfilePage() {
 
     fetchData();
   }, []);
+    
 
   if (loading) return <div className="loading-screen">Loading profile…</div>;
 
   if (!user) return <div className="loading-screen">Unauthorized</div>;
 
   return (
-    <div className="dashboard-wrapper">
-      <Sidebar active={active} setActive={setActive} />
-
-      <main className="dashboard-main">
+   
         <div className="content-grid">
           {/* CARD 1 — HERO */}
-          <section className="card hero-card">
-            <div className="hero-left">
-              <h1>{user.name}</h1>
-              <p>{user.email}</p>
-              <p>{user.walletAddress}</p>
-            </div>
+         <section className="card hero-card">
+  <div className="hero-left">
+    <h1>{user?.username}</h1>
+    <p>{user?.email}</p>
+  </div>
 
-            <div className="hero-avatar">
-              <img src={avatar} alt="avatar" />
-            </div>
+  <div className="hero-avatar">
+    <img src={avatar} alt="avatar" />
+  </div>
 
-            <div className="metrics-strip">
-              <Metric label="Transactions" value={transactions.length} />
-              <Metric label="Holdings" value={holdings.length} />
-              <Metric label="Listed" value={listedProperties.length} />
-            </div>
-          </section>
+  <div className="metrics-strip">
+    <Metric label="Transactions" value={transactions.length} />
+    <Metric label="Holdings" value={holdings.length} />
+    <Metric label="Listed" value={listedProperties.length} />
+  </div>
+</section>
 
           {/* CARD 2 */}
           <section className="card">
@@ -139,18 +135,39 @@ export default function ProfilePage() {
           </section>
 
           {/* CARD 4 */}
-          <section className="card full-width-card">
-            <h3>Recent Transactions</h3>
-            {recent.length === 0 && <p>No activity</p>}
-            {recent.map((tx) => (
-              <div key={tx._id}>
-                {tx.type} — {tx.amount}
-              </div>
-            ))}
-          </section>
+         <section className="card full-width-card">
+  <h3>Recent Transactions</h3>
+
+  {recent.length === 0 && (
+    <p className="empty-text">No recent activity</p>
+  )}
+
+  {recent.map((tx) => (
+    <div key={tx.transaction_hash} className="tx-row">
+      {/* LEFT */}
+      <div className="tx-left">
+        <div className="tx-title">
+          {tx.token_quantity} × {tx.token_name}
         </div>
-      </main>
+        <div className="tx-sub">
+          ₹{tx.price_per_token_inr} / token
+        </div>
+      </div>
+
+      {/* RIGHT */}
+      <div className="tx-right">
+        <span className={`tx-status ${tx.status}`}>
+          {tx.status}
+        </span>
+        <span className="tx-hash">
+          {tx.transaction_hash.slice(0, 6)}…
+          {tx.transaction_hash.slice(-4)}
+        </span>
+      </div>
     </div>
+  ))}
+</section>
+        </div>
   );
 }
 

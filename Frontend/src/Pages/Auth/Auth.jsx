@@ -81,7 +81,7 @@ const AuthPage = () => {
       }
 
       toast.success(isSignUp ? "Signup successful!" : "Login successful!");
-      setTimeout(() => navigate("/dashboard"), 1200);
+      setTimeout(() => navigate("/Dashboard"), 1200);
     } catch (err) {
       toast.error(err.message || "Something went wrong");
     } finally {

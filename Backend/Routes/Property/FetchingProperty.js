@@ -49,10 +49,9 @@ router.get("/properties/:id", async (req, res) => {
 
 router.get("/userproperties", async (req, res) => {
   try {
-     const user = await getAuthUser(req);
+    const user = await getAuthUser(req);
     const property = await FindingProperties(user.id);
     return res.status(200).json(property);
-
   } catch (err) {
     console.error("Error fetching properties:", err.message);
     return res.status(400).json({ error: err.message });

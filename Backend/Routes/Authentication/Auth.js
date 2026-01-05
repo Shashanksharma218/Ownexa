@@ -121,7 +121,7 @@ router.get("/auth/me", async (req, res) => {
     }
 
     const user = await FindUser(decoded.sub);
-
+    console.log(user);
     return res.status(200).json({
       loggedIn: true,
       user
