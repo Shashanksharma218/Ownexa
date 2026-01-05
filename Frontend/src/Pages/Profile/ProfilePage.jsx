@@ -147,7 +147,7 @@ const [timeSinceJoined, setTimeSinceJoined] = useState("");
   <div className="metrics-strip">
     <Metric label="Transactions" value={transactions.length} />
     <Metric label="Holdings" value={holdings.length} />
-    <Metric label="Listed" value={listedProperties.length} />
+    <Metric label="Properties" value={listedProperties.length} />
               </div>
               
               {timeSinceJoined && (
