@@ -20,9 +20,10 @@ const avatars = [
   avatar7,
 ];
 
+
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
-
+const [timeSinceJoined, setTimeSinceJoined] = useState("");
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [holdings, setHoldings] = useState([]);
@@ -31,7 +32,10 @@ export default function ProfilePage() {
 
  const [avatar] = useState(
   avatars[Math.floor(Math.random() * avatars.length)]
-); 
+    ); 
+    
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,6 +100,31 @@ export default function ProfilePage() {
     fetchData();
   }, []);
     
+   useEffect(() => {
+  if (!user?.created_at) return;
+
+  const joinedTime = new Date(user.created_at).getTime();
+
+  const updateTimer = () => {
+    const diff = Date.now() - joinedTime;
+
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff / 3600000) % 24);
+    const minutes = Math.floor((diff / 60000) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    setTimeSinceJoined(
+      `${days}d ${hours.toString().padStart(2, "0")}h ` +
+      `${minutes.toString().padStart(2, "0")}m ` +
+      `${seconds.toString().padStart(2, "0")}s`
+    );
+  };
+
+  updateTimer();
+  const interval = setInterval(updateTimer, 1000);
+
+  return () => clearInterval(interval);
+}, [user?.created_at]);
 
   if (loading) return <div className="loading-screen">Loading profile…</div>;
 
@@ -107,9 +136,9 @@ export default function ProfilePage() {
           {/* CARD 1 — HERO */}
          <section className="card hero-card">
   <div className="hero-left">
-    <h1>{user?.username}</h1>
-    <p>{user?.email}</p>
-  </div>
+  <h1>{user?.username}</h1>
+  <p>{user?.email}</p>
+</div>
 
   <div className="hero-avatar">
     <img src={avatar} alt="avatar" />
@@ -119,7 +148,13 @@ export default function ProfilePage() {
     <Metric label="Transactions" value={transactions.length} />
     <Metric label="Holdings" value={holdings.length} />
     <Metric label="Listed" value={listedProperties.length} />
+              </div>
+              
+              {timeSinceJoined && (
+  <div className="join-timer-corner">
+    Member for {timeSinceJoined}
   </div>
+)}
 </section>
 
           {/* CARD 2 */}

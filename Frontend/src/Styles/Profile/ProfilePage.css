@@ -32,7 +32,7 @@
   position: relative;
   grid-row: span 2;
 
-  min-height: 520px;
+  min-height: 480px;
   padding-bottom: 180px;
   margin-top: 40px;
 
@@ -53,11 +53,12 @@
 }
 
 .hero-left h1 {
-  font-size: 36px;
+  font-size: 48px;
   font-weight: 600;
   line-height: 1.2;
-  color: #f9fafb;
+  color: #318ce6;
   margin-bottom: 10px;
+  letter-spacing: +0.02em; 
 }
 
 .hero-left p {
@@ -91,7 +92,7 @@
   position: absolute;
   right: 48px;
   bottom: 32px ;
-
+ 
   z-index: 1;
   pointer-events: none;
 
@@ -99,7 +100,7 @@
 }
 
 .hero-avatar img {
-  width: 330px;
+  width: 300px;
   height: auto;
   border-radius: 24px 24px 10px 10px;
   object-fit: cover;
@@ -107,24 +108,40 @@
   opacity: 0;
   animation: avatar-image 0.9s ease-out forwards;
   box-shadow:
-    0 50px 120px rgba(0, 0, 0, 0.8);
+    0 50px 120px rgba(0, 0, 0, 0.863);
+
+    /* 🔥 THIS IS THE FIX */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 28%,
+    black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 28%,
+    black 100%
+  );
 }
+
+
 
 /* =========================
    METRICS STRIP (GLASS)
 ========================= */
 
 .metrics-strip {
-  position: absolute;
-  left: 48px;
-  right: 48px;
-  bottom: 20px;
-
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  margin-top: 40px;
+  margin-left: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 
-  padding: 18px 24px;
+  max-width: 420px;        /* 🔥 keeps it in name column */
+  
+  padding: 18px 20px;
 
   background: rgba(20, 22, 27, 0.65);
   backdrop-filter: blur(18px);
@@ -132,16 +149,21 @@
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
 
-  z-index: 2;
+  z-index: 3;
 }
-
 /* =========================
    METRIC
 ========================= */
 
 .metric {
+      transition: transform 0.2s ease, background 0.2s ease;
+  border-radius: 12px;
+  padding: 6px 0;
   text-align: center;
   flex: 1;
+}
+.metric:hover {
+  transform: translateY(-2px);
 }
 
 .metric h3 {
@@ -272,4 +294,56 @@
     opacity: 1;
     transform: translateY(32px);
   }
+}
+
+.join-timer-corner {
+  position: absolute;
+  left: 24px;
+  bottom: 20px;
+
+  z-index: 4;
+
+  font-size: 11px;
+  color: #9ca3af;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: rgba(20, 22, 27, 0.6);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  pointer-events: none; /* feels system-level */
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    120deg,
+    rgba(99, 102, 241, 0.08),
+    transparent 40%
+  );
+
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@keyframes avatar-scale-in {
+  from {
+    transform: translateY(40px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(32px) scale(1);
+    opacity: 1;
+  }
+}
+
+.hero-avatar img {
+  animation: avatar-scale-in 0.9s cubic-bezier(.22,.61,.36,1) forwards;
 }
