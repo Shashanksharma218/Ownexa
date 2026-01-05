@@ -4,8 +4,8 @@
 
 .txn-page {
   max-width: 1200px;
+  margin: 0 auto; 
 }
-
 .txn-title {
   font-size: 28px;
   font-weight: 600;
