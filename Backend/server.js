@@ -8,6 +8,7 @@ import FetchProperty from "./Routes/Property/FetchingProperty.js";
 import UpdateProperty from "./Routes/Property/UpdatingProperty.js";
 import PrimaryTransaction from "./Routes/Transactions/PrimaryTransactions.js"
 import Holdings from "./Routes/Holdings/Holding.js"
+import Listings from "./Routes/Listings/Listing.js"
 dotenv.config();
 
 const app = express();
@@ -27,6 +28,7 @@ app.use("/", UpdateProperty);
 app.use("/", FetchProperty);
 app.use("/", PrimaryTransaction);  
 app.use("/", Holdings);  
+app.use("/", Listings); 
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
