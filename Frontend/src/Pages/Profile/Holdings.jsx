@@ -13,17 +13,12 @@ const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
 export default function HoldingsPage() {
   const [loading, setLoading] = useState(true);
   const [holdings, setHoldings] = useState([]);
-
-  // modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedHolding, setSelectedHolding] = useState(null);
   const [listQty, setListQty] = useState("");
   const [listPrice, setListPrice] = useState("");
   const [listingLoading, setListingLoading] = useState(false);
 
-  /* =========================
-     FETCH HOLDINGS
-  ========================= */
   useEffect(() => {
     const fetchHoldings = async () => {
       try {
@@ -44,9 +39,6 @@ export default function HoldingsPage() {
     fetchHoldings();
   }, []);
 
-  /* =========================
-     CONTRACT HELPER
-  ========================= */
   const getContract = async () => {
     if (!window.ethereum) {
       throw new Error("MetaMask not detected");
@@ -62,9 +54,6 @@ export default function HoldingsPage() {
     );
   };
 
-  /* =========================
-     MODAL HANDLERS
-  ========================= */
   const openModal = (holding) => {
     setSelectedHolding(holding);
     setListQty("");
@@ -76,10 +65,6 @@ export default function HoldingsPage() {
     setShowModal(false);
     setSelectedHolding(null);
   };
-
-  /* =========================
-     LIST TOKENS (CHAIN → BACKEND)
-  ========================= */
   const handleListTokens = async () => {
     if (!selectedHolding) return;
 
@@ -94,14 +79,9 @@ export default function HoldingsPage() {
 
     try {
       setListingLoading(true);
-
-      // 1️⃣ CONTRACT
       const contract = await getContract();
-
-      // ⚠️ Replace with YOUR real INR → ETH conversion
       const ethValue = (priceInInr / ETH_INR).toFixed(18);
       const priceInEth = ethers.parseEther(ethValue);
-      // 2️⃣ BLOCKCHAIN TX
       const tx = await contract.createListing(
         selectedHolding.properties.blockchain_id,
         qty,
@@ -109,8 +89,6 @@ export default function HoldingsPage() {
       );
 
       const receipt = await tx.wait();
-
-      // 3️⃣ PARSE EVENT
       let listingId
       for (const log of receipt.logs) {
         try {
@@ -124,7 +102,6 @@ export default function HoldingsPage() {
         throw new Error("Blockchain ID not found in events");
       }
 
-      // 4️⃣ BACKEND SYNC
       const res = await fetch(`${API}/listing`, {
         method: "POST",
         credentials: "include",
@@ -141,8 +118,6 @@ export default function HoldingsPage() {
       if (!res.ok) {
         throw new Error("Backend listing sync failed");
       }
-
-      // 5️⃣ UPDATE UI
       setHoldings((prev) =>
         prev
           .map((h) =>
@@ -162,9 +137,6 @@ export default function HoldingsPage() {
     }
   };
 
-  /* =========================
-     RENDER
-  ========================= */
   if (loading) {
     return <div className="txn-loading">Loading Holdings…</div>;
   }
@@ -257,10 +229,6 @@ export default function HoldingsPage() {
           })}
         </div>
       )}
-
-      {/* =========================
-         LIST MODAL
-      ========================= */}
       {showModal && selectedHolding && (
         <div className="modal-backdrop">
           <div className="modal-card">

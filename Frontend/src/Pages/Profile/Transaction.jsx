@@ -57,7 +57,6 @@ export default function TransactionsPage() {
 
             return (
               <div key={tx.id} className="txn-card">
-                {/* TOP */}
                 <div className="txn-card-top">
                   <div className="txn-left">
                     <h4 className="txn-token">{tx.token_name}</h4>
@@ -71,13 +70,10 @@ export default function TransactionsPage() {
                   </span>
                 </div>
 
-                {/* MID */}
                 <div className="txn-mid">
                   {tx.token_quantity} tokens × ₹
                   {tx.price_per_token_inr}
                 </div>
-
-                {/* BOTTOM */}
                 <div className="txn-bottom">
                   <span className="txn-total">
                     ₹{total.toLocaleString()}

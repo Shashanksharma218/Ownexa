@@ -18,7 +18,6 @@ export default function AdminViewPage() {
         );
         if (!res.ok) throw new Error("Failed to fetch properties");
         const data = await res.json();
-        // earliest first
         const sorted = data.sort(
           (a, b) => new Date(a.created_at) - new Date(b.created_at)
         );
@@ -51,13 +50,11 @@ export default function AdminViewPage() {
               className="admin-property-card"
               onClick={() => navigate(`/AdminProperty/${property.id}`)}
             >
-              {/* HEADER */}
               <div className="card-header">
                 <h3 className="property-title">{property.title}</h3>
                 <span className="status-badge pending">PENDING</span>
               </div>
 
-              {/* BODY */}
               <div className="card-body">
                 <p>
                   <span>Owner:</span> {property.owner_name}
@@ -66,8 +63,6 @@ export default function AdminViewPage() {
                   <span>Location:</span> {property.city}, {property.state}
                 </p>
               </div>
-
-              {/* FOOTER */}
               <div className="card-footer">
                 <span className="submitted-date">
                   Submitted:{" "}

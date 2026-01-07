@@ -11,19 +11,15 @@ const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
 export default function AdminPropertyPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [minting, setMinting] = useState(false);
   const [error, setError] = useState("");
-  // Admin mint form
   const [tokenName, setTokenName] = useState("");
   const [tokenQuantity, setTokenQuantity] = useState("");
   const [pricePerTokenINR, setPricePerTokenINR] = useState("");
   const [adminreview, setadminreview] = useState("");
-  /* ----------------------------------
-     FETCH PROPERTY
-  ---------------------------------- */
+
   useEffect(() => {
     const fetchProperty = async () => {
       try {
@@ -46,10 +42,8 @@ export default function AdminPropertyPage() {
     fetchProperty();
   }, [id]);
 
-  /* ----------------------------------
-     MINT + VALIDATE
-  ---------------------------------- */
-  const ETH_INR = 300000; // keep configurable
+
+  const ETH_INR = 300000;
   const handleRejectProperty = async () => {
     try {
       if (!adminreview.trim()) {
@@ -97,13 +91,9 @@ export default function AdminPropertyPage() {
       if (!tokenName || !tokenQuantity || !pricePerTokenINR) {
         throw new Error("Fill all admin fields");
       }
-
-      // ---- PRICE CONVERSION ----
       const pricePerTokenETH =
         (Number(pricePerTokenINR) / ETH_INR).toFixed(18);
       const pricePerTokenWei = ethers.parseEther(pricePerTokenETH)
-
-      /* ---- CONNECT WALLET ---- */
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
@@ -112,8 +102,6 @@ export default function AdminPropertyPage() {
         PropertyTokenABI,
         signer
       );
-
-      /* ---- MINT ---- */
       const tx = await contract.listProperty(
         property.owner_accountaddress,
         BigInt(tokenQuantity),
@@ -122,8 +110,6 @@ export default function AdminPropertyPage() {
       );
 
       const receipt = await tx.wait();
-
-      /* ---- EXTRACT BLOCKCHAIN ID ---- */
       let blockchainId = null;
       for (const log of receipt.logs) {
         try {
@@ -137,8 +123,6 @@ export default function AdminPropertyPage() {
       if (!blockchainId) {
         throw new Error("Blockchain ID not found in events");
       }
-
-      /* ---- BACKEND UPDATE ---- */
       const res = await fetch(`${API}/property/validate`, {
         method: "PUT",
         credentials: "include",
@@ -149,9 +133,9 @@ export default function AdminPropertyPage() {
           transactionHash: receipt.hash,
           tokenName,
           adminreview,
-          status: "Validated",  // ✅ explicit
+          status: "Validated",
           tokenization: true,
-          listing: true,        // ✅ explicit
+          listing: true,
           tokenQuantity: Number(tokenQuantity),
           pricePerTokenINR: Number(pricePerTokenINR),
           launchedPriceINR:
@@ -163,7 +147,6 @@ export default function AdminPropertyPage() {
         const err = await res.json();
         throw new Error(err.error || "Validation failed");
       }
-
       alert("Property validated & minted successfully");
       navigate("/AdminViewPage");
 
@@ -181,19 +164,13 @@ export default function AdminPropertyPage() {
   return (
     <div className="property-page">
       <div className="property-container">
-
-        {/* HEADER */}
         <div className="property-header">
           <h2>{property.title}</h2>
           <span className="status-badge pending">
             {property.status.toUpperCase()}
           </span>
         </div>
-
-        {/* LAYOUT */}
         <div className="property-layout">
-
-          {/* LEFT (35%) */}
           <div className="property-left">
             <InfoCard title="Property Details">
               <p>{property.bhk} BHK • {property.property_type}</p>
@@ -225,7 +202,6 @@ export default function AdminPropertyPage() {
             </InfoCard>
           </div>
 
-          {/* RIGHT (65%) */}
           <div className="property-right">
 
             <InfoCard title="Property Images">
@@ -249,7 +225,6 @@ export default function AdminPropertyPage() {
 
                 <div className="admin-form-row">
 
-                  {/* LEFT: stacked token fields */}
                   <div className="token-fields-vertical">
                     <input
                       placeholder="Token Name"
@@ -272,7 +247,6 @@ export default function AdminPropertyPage() {
                     />
                   </div>
 
-                  {/* RIGHT: admin review */}
                   <div className="admin-review-field">
                     <textarea
                       placeholder="Admin review (verification / rejection notes)"
@@ -284,7 +258,6 @@ export default function AdminPropertyPage() {
 
                 </div>
 
-                {/* ACTION BUTTONS */}
                 <div className="action-row">
                   <button
                     className="mint-btn"
@@ -313,9 +286,6 @@ export default function AdminPropertyPage() {
   );
 }
 
-/* ----------------------------------
-   REUSABLE CARD
----------------------------------- */
 function InfoCard({ title, children }) {
   return (
     <div className="preview-card">

@@ -51,7 +51,6 @@ export default function ListingsPage() {
 
   return (
     <div className="listings-page">
-      {/* ================= ACTIVE LISTINGS ================= */}
       <section className="listings-section">
         <h2 className="listings-title">Active Listings</h2>
 
@@ -109,8 +108,6 @@ export default function ListingsPage() {
           </div>
         )}
       </section>
-
-      {/* ================= SOLD LISTINGS ================= */}
       <section className="listings-section">
         <h2 className="listings-title">Sold Listings</h2>
 

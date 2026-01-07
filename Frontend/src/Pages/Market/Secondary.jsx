@@ -18,7 +18,6 @@ export default function SecondaryMarket() {
                 );
                 if (!res.ok) throw new Error("Failed to fetch listed");
                 const data = await res.json();
-                // latest first
                 const sorted = data.sort(
                     (a, b) => new Date(b.validated_at) - new Date(a.validated_at)
                 );
@@ -53,7 +52,6 @@ export default function SecondaryMarket() {
                         >
                             <div className="market-card-row">
 
-                                {/* LEFT: IMAGE STACK */}
                                 <div className="market-card-images">
                                     <img
                                         src={
@@ -71,12 +69,10 @@ export default function SecondaryMarket() {
                                 </div>
 
                                 <div className="market-card-content">
-
                                     <div className="market-card-header">
                                         <h3 className="market-card-title">
                                             {item.properties.title}
                                         </h3>
-
                                         <span className="market-status-badge active">
                                             ACTIVE
                                         </span>

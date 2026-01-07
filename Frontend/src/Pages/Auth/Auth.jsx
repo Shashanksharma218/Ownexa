@@ -14,7 +14,7 @@ const AuthPage = () => {
     Username: "",
     Email: "",
     Password: "",
-    Gender:""
+    Gender: ""
   });
   const [loading, setLoading] = useState(false);
 
@@ -47,17 +47,17 @@ const AuthPage = () => {
     }
 
     if (isSignUp && !formData.Gender) {
-  toast.error("Please select a gender");
-  return false;
-} 
+      toast.error("Please select a gender");
+      return false;
+    }
 
     return true;
   };
 
   const getRandomAvatar = (gender) => {
-  const pool = gender === "male" ? MALE_AVATARS : FEMALE_AVATARS;
-  return pool[Math.floor(Math.random() * pool.length)];
-}; 
+    const pool = gender === "male" ? MALE_AVATARS : FEMALE_AVATARS;
+    return pool[Math.floor(Math.random() * pool.length)];
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -105,7 +105,6 @@ const AuthPage = () => {
     <div className="auth-container">
       <div className="background-image"></div>
 
-      {/* LEFT SIDE */}
       <div className="left-side">
         <div className="left-overlay">
           <div className="brand-block">
@@ -122,7 +121,7 @@ const AuthPage = () => {
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
+
       <div className="right-side">
         <div className="right-overlay">
           <form className="form-box" onSubmit={handleSubmit}>
@@ -155,30 +154,30 @@ const AuthPage = () => {
             />
 
             {isSignUp && (
-  <div className="gender-group">
-    <label>
-      <input
-        type="radio"
-        name="Gender"
-        value="male"
-        checked={formData.Gender === "male"}
-        onChange={handleChange}
-      />
-      Male
-    </label>
+              <div className="gender-group">
+                <label>
+                  <input
+                    type="radio"
+                    name="Gender"
+                    value="male"
+                    checked={formData.Gender === "male"}
+                    onChange={handleChange}
+                  />
+                  Male
+                </label>
 
-    <label>
-      <input
-        type="radio"
-        name="Gender"
-        value="female"
-        checked={formData.Gender === "female"}
-        onChange={handleChange}
-      />
-      Female
-    </label>
-  </div>
-)}
+                <label>
+                  <input
+                    type="radio"
+                    name="Gender"
+                    value="female"
+                    checked={formData.Gender === "female"}
+                    onChange={handleChange}
+                  />
+                  Female
+                </label>
+              </div>
+            )}
 
             <button
               type="submit"

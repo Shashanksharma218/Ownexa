@@ -45,10 +45,6 @@ export default function PropertyCard() {
 
     fetchProperty();
   }, [id]);
-
-  /* ----------------------------------
-     PRIMARY BUY HANDLER
-  ---------------------------------- */
   const handlePrimaryBuy = async () => {
     try {
       if (!window.ethereum) {
@@ -60,33 +56,16 @@ export default function PropertyCard() {
       }
 
       setBuying(true);
-
-      /* 1️⃣ Wallet + Provider */
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const buyerAddress = await signer.getAddress();
-
-      /* 2️⃣ Price calculation */
-      /* 2️⃣ Price calculation — WEI SAFE */
-
-      // price_per_token_inr → ETH → WEI (per token)
       const pricePerTokenWei = ethers.parseEther(
         (Number(property.price_per_token_inr) / ETH_INR).toFixed(18)
       );
-
-      // base price = pricePerTokenWei * quantity
       const basePriceWei = pricePerTokenWei * BigInt(quantity);
-
-      // 2% commission (integer math)
       const commissionWei = (basePriceWei * 2n) / 100n;
-
-      // total price (EXACT)
       const totalPriceWei = basePriceWei + commissionWei;
-
-      // THIS goes to the contract
       const value = totalPriceWei;
-
-      /* 3️⃣ Contract call */
       const contract = new ethers.Contract(
         CONTRACT_ADDRESS,
         PropertyTokenABI,
@@ -96,12 +75,10 @@ export default function PropertyCard() {
       const tx = await contract.buyTokens(
         property.blockchain_id,
         BigInt(quantity),
-        { value } // 👈 ETH attached to the transaction
+        { value }
       );
 
       const receipt = await tx.wait();
-
-      /* 4️⃣ Backend sync */
       const res = await fetch(`${API}/transaction?type=primary`, {
         method: "POST",
         credentials: "include",
@@ -141,7 +118,6 @@ export default function PropertyCard() {
     <div className="property-buy-page">
       <div className="property-buy-container">
 
-        {/* LEFT */}
         <div className="property-main">
           <div className="property-image-grid">
             {property.property_images?.map((img, idx) => (
@@ -150,11 +126,8 @@ export default function PropertyCard() {
           </div>
 
           <div className="property-details">
-
-            {/* TITLE */}
             <h2 className="property-title">{property.title}</h2>
 
-            {/* LOCATION */}
             <div className="detail-row full">
               <MapPin size={16} />
               <span>
@@ -162,7 +135,6 @@ export default function PropertyCard() {
               </span>
             </div>
 
-            {/* GRID */}
             <div className="details-grid">
 
               <div className="detail-item">
@@ -197,7 +169,6 @@ export default function PropertyCard() {
 
             </div>
 
-            {/* REGISTRY */}
             <div className="detail-row full">
               <FileText size={16} />
               <span>
@@ -207,14 +178,9 @@ export default function PropertyCard() {
 
           </div>
         </div>
-
-        {/* RIGHT */}
         <div className="property-market">
-
-          {/* PRIMARY MARKET */}
           <div className="market-card primary-market">
             <h3>Primary Market</h3>
-
             <p className="price">
               ₹{property.price_per_token_inr} / token
             </p>
@@ -226,7 +192,6 @@ export default function PropertyCard() {
               onChange={(e) => setQuantity(e.target.value)}
               disabled={buying}
             />
-
             <button
               className="buy-btn"
               onClick={handlePrimaryBuy}
@@ -235,8 +200,6 @@ export default function PropertyCard() {
               {buying ? "Buying..." : "Buy Primary"}
             </button>
           </div>
-
-          {/* SECONDARY MARKET (EMPTY FOR NOW) */}
           <div className="market-card secondary-market">
             <h3>Secondary Market</h3>
             <div className="empty-secondary">

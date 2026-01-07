@@ -24,13 +24,9 @@ export default function ProfilePage() {
     const [recent, setRecent] = useState([]);
     const [totalInvestment, setTotalInvestment] = useState(0);
 
-
-
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 1️⃣ AUTH
                 const userRes = await fetch(`${API}/auth/me`, {
                     credentials: "include",
                 });
@@ -39,8 +35,6 @@ export default function ProfilePage() {
 
                 const userData = await userRes.json();
                 setUser(userData.user);
-
-                // 2️⃣ DEPENDENT DATA
                 const [propertyRes, transactionRes, holdingRes] =
                     await Promise.all([
                         fetch(`${API}/userproperties`, { credentials: "include" }),
@@ -59,8 +53,6 @@ export default function ProfilePage() {
                 setListedProperties(p);
                 setTransactions(t);
                 setHoldings(h);
-
-                // 🔥 3️⃣ TOTAL INVESTMENT CALCULATION (ADD THIS)
                 const total = h.reduce((sum, tx) => {
                     const qty = Number(tx.token_quantity) || 0;
                     const price = Number(tx.avg_price_inr) || 0;
@@ -68,8 +60,6 @@ export default function ProfilePage() {
                 }, 0);
 
                 setTotalInvestment(total);
-
-                // 4️⃣ RECENT ACTIVITY
                 const allActivity = t
                     .map((i) => ({
                         ...i,
@@ -88,7 +78,7 @@ export default function ProfilePage() {
                 setTransactions([]);
                 setListedProperties([]);
                 setRecent([]);
-                setTotalInvestment(0); // ✅ reset safely
+                setTotalInvestment(0);
             } finally {
                 setLoading(false);
             }
@@ -129,7 +119,6 @@ export default function ProfilePage() {
     return (
 
         <div className="content-grid">
-            {/* CARD 1 — HERO */}
             <section className="card hero-card">
                 <div className="hero-left">
                     <h1>{user?.username}</h1>
@@ -153,7 +142,6 @@ export default function ProfilePage() {
                 )}
             </section>
 
-            {/* CARD 2 */}
             <section className="card-holding">
                 <div className="card-header">
                     <h3>Total Investment</h3>
@@ -179,8 +167,6 @@ export default function ProfilePage() {
 
                 <span className="view-hint">View all holdings</span>
             </section>
-
-            {/* CARD 3 */}
             <section className="card-property">
                 <div className="card-header">
                     <h3>Listed Properties</h3>
@@ -213,7 +199,6 @@ export default function ProfilePage() {
                 <span className="view-hint">View all properties</span>
             </section>
 
-            {/* CARD 4 */}
             <section className="card full-width-card card-transactions">
                 <div className="card-header">
                     <h3>Recent Transactions</h3>
@@ -230,7 +215,6 @@ export default function ProfilePage() {
 
                             return (
                                 <div key={tx.transaction_hash} className="tx-row">
-                                    {/* LEFT */}
                                     <div className="tx-left">
                                         <div className="tx-title">
                                             {tx.token_quantity} × {tx.token_name}
@@ -241,7 +225,6 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
-                                    {/* RIGHT */}
                                     <div className="tx-right">
                                         <div className="tx-amount">
                                             ₹{total.toLocaleString("en-IN")}

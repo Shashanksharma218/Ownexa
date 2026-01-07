@@ -13,16 +13,13 @@ export default function AddProperty() {
     bhk: "",
     propertyType: "",
     builtUpAreaSqFt: "",
-
     addressLine: "",
     city: "",
     state: "",
     pincode: "",
-
     registryName: "",
     registryNumber: "",
     registrationDate: "",
-
     expectedPriceInr: "",
     tokenName: ""
   });
@@ -30,7 +27,6 @@ export default function AddProperty() {
   const [propertyImages, setPropertyImages] = useState([]);
   const [legalDocuments, setLegalDocuments] = useState([]);
 
-  // 🔐 CONNECT WALLET
   const connectWallet = async () => {
     try {
       if (!window.ethereum) {
@@ -50,7 +46,6 @@ export default function AddProperty() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 🚀 SUBMIT HANDLER
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -91,7 +86,6 @@ export default function AddProperty() {
 
   return (
     <div className="add-property-page">
-      {/* LEFT PANEL */}
       <div className="form-panel">
         <h2>Add Property</h2>
 
@@ -103,9 +97,6 @@ export default function AddProperty() {
             onChange={handleChange}
             required
           />
-
-          {/* WALLET (READ ONLY) */}
-
 
           <input name="title" placeholder="Property Title" onChange={handleChange} required />
           <input name="bhk" placeholder="BHK" onChange={handleChange} required />
@@ -178,7 +169,6 @@ export default function AddProperty() {
         </form>
       </div>
 
-      {/* RIGHT PANEL */}
       <div className="preview-panel">
         <h2>Live Preview</h2>
         <PreviewItem label="Wallet Address" value={walletAddress} />
