@@ -3,7 +3,7 @@ import supabase from "../../SupabaseClient.js";
 const ValidateProperty = async (data, adminUser) => {
   if (!data.propertyId) {
     throw new Error("Property ID is required");
-  } 
+  }
   const { data: property, error } = await supabase
     .from("properties")
     .update({

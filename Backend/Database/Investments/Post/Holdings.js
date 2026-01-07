@@ -13,20 +13,20 @@ const Holdings = async (data, user) => {
 
   const wallet = accountaddress.toLowerCase();
   const qty = Number(tokenQuantity);
-  const price = Number(pricePerTokenInr); 
-    
+  const price = Number(pricePerTokenInr);
+
   const { data: existingHolding, error: fetchError } = await supabase
     .from("holdings")
     .select("id, token_quantity, avg_price_inr")
     .eq("wallet_address", wallet)
     .eq("property_id", propertyId)
-    .eq("user_id" , user.id)
+    .eq("user_id", user.id)
     .single();
 
   if (fetchError && fetchError.code !== "PGRST116") {
     throw fetchError;
   }
-    
+
   if (existingHolding) {
     const oldQty = existingHolding.token_quantity;
     const oldAvg = existingHolding.avg_price_inr || 0;
@@ -56,8 +56,8 @@ const Holdings = async (data, user) => {
       wallet_address: wallet,
       property_id: propertyId,
       token_quantity: qty,
-      avg_price_inr: price, 
-      holding_status : true 
+      avg_price_inr: price,
+      holding_status: true
     });
 
   if (insertError) throw insertError;

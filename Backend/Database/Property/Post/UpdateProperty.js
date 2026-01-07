@@ -8,7 +8,7 @@ const UpdateProperty = async (data) => {
   const { data: rows, error: fetchError } = await supabase
     .from("properties")
     .select("token_quantity")
-    .eq("id", data.propertyId); 
+    .eq("id", data.propertyId);
 
   if (fetchError) throw fetchError;
 

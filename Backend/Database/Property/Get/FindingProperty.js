@@ -41,4 +41,4 @@ const FindingProperties = async (userId) => {
   if (error) throw error;
   return data;
 };
-export { FindProperty, FindOneProperty  , FindingProperties};
+export { FindProperty, FindOneProperty, FindingProperties };

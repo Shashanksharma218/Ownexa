@@ -33,19 +33,19 @@ export default function TransactionsPage() {
 
   return (
     <div className="txn-page">
-     <div className="txn-header">
-  <h1 className="txn-title">Transactions</h1>
+      <div className="txn-header">
+        <h1 className="txn-title">Transactions</h1>
 
-  <SortBar
-    options={[
-      { key: "token_quantity", label: "Token" },
-      { key: "created_at", label: "Date" },
-      { key: "price_per_token_inr", label: "Avg Price" },
-    ]}
-    data={transactions}
-    onChange={setTransactions}
-  />
-</div>
+        <SortBar
+          options={[
+            { key: "token_quantity", label: "Token" },
+            { key: "created_at", label: "Date" },
+            { key: "price_per_token_inr", label: "Avg Price" },
+          ]}
+          data={transactions}
+          onChange={setTransactions}
+        />
+      </div>
 
       {transactions.length === 0 ? (
         <p className="txn-empty">No transactions found</p>

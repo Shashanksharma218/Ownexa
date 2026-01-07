@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 export default function PropertyCard() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState(false);
@@ -31,7 +31,7 @@ export default function PropertyCard() {
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-         const res = await fetch(`${API}/properties/${id}?status=validated&listed=true`, {
+        const res = await fetch(`${API}/properties/${id}?status=validated&listed=true`, {
           credentials: "include"
         });
         const data = await res.json();
@@ -66,25 +66,25 @@ export default function PropertyCard() {
       const signer = await provider.getSigner();
       const buyerAddress = await signer.getAddress();
 
-  /* 2️⃣ Price calculation */
-/* 2️⃣ Price calculation — WEI SAFE */
+      /* 2️⃣ Price calculation */
+      /* 2️⃣ Price calculation — WEI SAFE */
 
-// price_per_token_inr → ETH → WEI (per token)
-const pricePerTokenWei = ethers.parseEther(
-  (Number(property.price_per_token_inr) / ETH_INR).toFixed(18)
-);
+      // price_per_token_inr → ETH → WEI (per token)
+      const pricePerTokenWei = ethers.parseEther(
+        (Number(property.price_per_token_inr) / ETH_INR).toFixed(18)
+      );
 
-// base price = pricePerTokenWei * quantity
-const basePriceWei = pricePerTokenWei * BigInt(quantity);
+      // base price = pricePerTokenWei * quantity
+      const basePriceWei = pricePerTokenWei * BigInt(quantity);
 
-// 2% commission (integer math)
-const commissionWei = (basePriceWei * 2n) / 100n;
+      // 2% commission (integer math)
+      const commissionWei = (basePriceWei * 2n) / 100n;
 
-// total price (EXACT)
-const totalPriceWei = basePriceWei + commissionWei;
+      // total price (EXACT)
+      const totalPriceWei = basePriceWei + commissionWei;
 
-// THIS goes to the contract
-const value = totalPriceWei;
+      // THIS goes to the contract
+      const value = totalPriceWei;
 
       /* 3️⃣ Contract call */
       const contract = new ethers.Contract(
@@ -94,10 +94,10 @@ const value = totalPriceWei;
       );
 
       const tx = await contract.buyTokens(
-  property.blockchain_id,
-  BigInt(quantity),
-  { value } // 👈 ETH attached to the transaction
-); 
+        property.blockchain_id,
+        BigInt(quantity),
+        { value } // 👈 ETH attached to the transaction
+      );
 
       const receipt = await tx.wait();
 
@@ -108,8 +108,8 @@ const value = totalPriceWei;
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           propertyId: property.id,
-            blockchainId: property.blockchain_id,
-            tokenName : property.token_name , 
+          blockchainId: property.blockchain_id,
+          tokenName: property.token_name,
           tokenQuantity: Number(quantity),
           pricePerTokenInr: property.price_per_token_inr,
           accountaddress: buyerAddress,
@@ -149,63 +149,63 @@ const value = totalPriceWei;
             ))}
           </div>
 
-         <div className="property-details">
+          <div className="property-details">
 
-  {/* TITLE */}
-  <h2 className="property-title">{property.title}</h2>
+            {/* TITLE */}
+            <h2 className="property-title">{property.title}</h2>
 
-  {/* LOCATION */}
-  <div className="detail-row full">
-    <MapPin size={16} />
-    <span>
-      {property.address_line}, {property.city}, {property.state} – {property.pincode}
-    </span>
-  </div>
+            {/* LOCATION */}
+            <div className="detail-row full">
+              <MapPin size={16} />
+              <span>
+                {property.address_line}, {property.city}, {property.state} – {property.pincode}
+              </span>
+            </div>
 
-  {/* GRID */}
-  <div className="details-grid">
+            {/* GRID */}
+            <div className="details-grid">
 
-    <div className="detail-item">
-      <Home size={16} />
-      <span>{property.bhk} BHK</span>
-    </div>
+              <div className="detail-item">
+                <Home size={16} />
+                <span>{property.bhk} BHK</span>
+              </div>
 
-    <div className="detail-item">
-      <Building2 size={16} />
-      <span>{property.property_type}</span>
-    </div>
+              <div className="detail-item">
+                <Building2 size={16} />
+                <span>{property.property_type}</span>
+              </div>
 
-    <div className="detail-item">
-      <Ruler size={16} />
-      <span>{property.built_up_area_sqft} sqft</span>
-    </div>
+              <div className="detail-item">
+                <Ruler size={16} />
+                <span>{property.built_up_area_sqft} sqft</span>
+              </div>
 
-    <div className="detail-item">
-      <Coins size={16} />
-      <span>{property.token_name}</span>
-    </div>
+              <div className="detail-item">
+                <Coins size={16} />
+                <span>{property.token_name}</span>
+              </div>
 
-    <div className="detail-item">
-      <IndianRupee size={16} />
-      <span>{property.price_per_token_inr} / token</span>
-    </div>
+              <div className="detail-item">
+                <IndianRupee size={16} />
+                <span>{property.price_per_token_inr} / token</span>
+              </div>
 
-    <div className="detail-item">
-      <Layers size={16} />
-      <span>{property.token_quantity} tokens left</span>
-    </div>
+              <div className="detail-item">
+                <Layers size={16} />
+                <span>{property.token_quantity} tokens left</span>
+              </div>
 
-  </div>
+            </div>
 
-  {/* REGISTRY */}
-  <div className="detail-row full">
-    <FileText size={16} />
-    <span>
-      {property.registry_name} • {property.registry_number}
-    </span>
-  </div>
+            {/* REGISTRY */}
+            <div className="detail-row full">
+              <FileText size={16} />
+              <span>
+                {property.registry_name} • {property.registry_number}
+              </span>
+            </div>
 
-</div>
+          </div>
         </div>
 
         {/* RIGHT */}

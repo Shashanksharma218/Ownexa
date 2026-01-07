@@ -66,7 +66,7 @@ export default function AdminPropertyPage() {
           adminreview,
           status: "Rejected",
           listing: false,
-          tokenization: false , 
+          tokenization: false,
           tokenQuantity: 0,
           pricePerTokenINR: 0,
           launchedPriceINR:
@@ -150,7 +150,7 @@ export default function AdminPropertyPage() {
           tokenName,
           adminreview,
           status: "Validated",  // ✅ explicit
-          tokenization: true  , 
+          tokenization: true,
           listing: true,        // ✅ explicit
           tokenQuantity: Number(tokenQuantity),
           pricePerTokenINR: Number(pricePerTokenINR),

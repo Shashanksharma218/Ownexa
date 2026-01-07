@@ -99,8 +99,8 @@ export default function HoldingsPage() {
       const contract = await getContract();
 
       // ⚠️ Replace with YOUR real INR → ETH conversion
-     const ethValue = (priceInInr / ETH_INR).toFixed(18);
-const priceInEth = ethers.parseEther(ethValue); 
+      const ethValue = (priceInInr / ETH_INR).toFixed(18);
+      const priceInEth = ethers.parseEther(ethValue);
       // 2️⃣ BLOCKCHAIN TX
       const tx = await contract.createListing(
         selectedHolding.properties.blockchain_id,
@@ -110,9 +110,9 @@ const priceInEth = ethers.parseEther(ethValue);
 
       const receipt = await tx.wait();
 
-        // 3️⃣ PARSE EVENT
-        let listingId 
-       for (const log of receipt.logs) {
+      // 3️⃣ PARSE EVENT
+      let listingId
+      for (const log of receipt.logs) {
         try {
           const parsed = contract.interface.parseLog(log);
           if (parsed?.name === "ListingCreated") {
@@ -120,7 +120,7 @@ const priceInEth = ethers.parseEther(ethValue);
           }
         } catch (err) { console.log(err); }
       }
-  if (!listingId) {
+      if (!listingId) {
         throw new Error("Blockchain ID not found in events");
       }
 

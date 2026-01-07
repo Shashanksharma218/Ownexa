@@ -1,9 +1,9 @@
 import supabase from "../../SupabaseClient.js";
 
-const PrimaryTransaction = async (data, user , type) => {
+const PrimaryTransaction = async (data, user, type) => {
   if (!user?.id) {
     throw new Error("Unauthorized: User not found");
-  }  
+  }
   const { data: transaction, error } = await supabase
     .from("primary_transactions")
     .insert({
@@ -14,8 +14,8 @@ const PrimaryTransaction = async (data, user , type) => {
       token_name: data.tokenName,
       price_per_token_inr: data.pricePerTokenInr,
       transaction_hash: data.transactionhash,
-      status: data.status, 
-      type : type 
+      status: data.status,
+      type: type
     })
     .select()
     .single();

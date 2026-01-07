@@ -26,7 +26,7 @@ const FindHoldings = async (user) => {
       )
     `)
     .eq("user_id", user.id)
-    .eq("holding_status" , true )
+    .eq("holding_status", true)
     .order("updated_at", { ascending: false });
 
   if (error) throw error;

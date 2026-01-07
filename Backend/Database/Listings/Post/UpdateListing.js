@@ -1,6 +1,6 @@
 import supabase from "../../SupabaseClient.js";
 
-const UpdateListing = async (data, user , status) => {
+const UpdateListing = async (data, user, status) => {
   if (!data?.listingId) {
     throw new Error("Listing ID is required");
   }
@@ -8,17 +8,17 @@ const UpdateListing = async (data, user , status) => {
     throw new Error("Authenticated user required");
   }
   const { data: updatedListing, error } = await supabase
-    .from("listings") 
+    .from("listings")
     .update({
       buyer_id: user.id,
       transaction_hash: data.transactionHash,
-      status: status ,
+      status: status,
       updated_at: new Date().toISOString(),
     })
     .eq("id", data.listingId)
     .select()
-    .single() 
-   
+    .single()
+
   if (error) throw error;
 
   if (!updatedListing) {

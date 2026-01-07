@@ -13,11 +13,11 @@ const FindPropertyListing = async (status, propertyId) => {
 
   if (error) throw error;
   return data;
-}; 
+};
 
 // All Listings 
 const FindListings = async (status) => {
-  if (status === undefined ) {
+  if (status === undefined) {
     throw new Error("Status is not defined");
   }
   const { data, error } = await supabase
@@ -40,33 +40,33 @@ const FindListings = async (status) => {
         status,
         is_listed
       )`)
-    .eq("status", status) 
+    .eq("status", status)
 
   if (error) throw error;
   return data;
-}; 
+};
 
 // For Seller 
-const FindingSellerListing = async (userId , status ) => {
+const FindingSellerListing = async (userId, status) => {
   const { data, error } = await supabase
     .from("listings")
     .select("*")
-    .eq("seller_id", userId).eq("status" , status).order("updated_at", { ascending: true });
-    
+    .eq("seller_id", userId).eq("status", status).order("updated_at", { ascending: true });
+
   if (error) throw error;
   return data;
-}; 
+};
 
 // For Buyer 
-const FindingBuyerListing = async (userId , status ) => {
+const FindingBuyerListing = async (userId, status) => {
   const { data, error } = await supabase
     .from("listings")
     .select("*")
-    .eq("buyer_id", userId).eq("status" , status).order("updated_at", { ascending: true });
-    
+    .eq("buyer_id", userId).eq("status", status).order("updated_at", { ascending: true });
+
   if (error) throw error;
   return data;
-}; 
- 
+};
 
-export { FindPropertyListing, FindingBuyerListing  , FindingSellerListing , FindListings};
+
+export { FindPropertyListing, FindingBuyerListing, FindingSellerListing, FindListings };

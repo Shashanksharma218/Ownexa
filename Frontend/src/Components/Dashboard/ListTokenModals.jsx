@@ -19,8 +19,8 @@ export default function ListTokenModal({ holding, onClose, onSubmit }) {
             type="number"
             max={holding.token_quantity}
             value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                      placeholder="Enter Amount"
+            onChange={(e) => setQuantity(e.target.value)}
+            placeholder="Enter Amount"
           />
         </label>
 
@@ -29,8 +29,8 @@ export default function ListTokenModal({ holding, onClose, onSubmit }) {
           <input
             type="number"
             value={price}
-                      onChange={(e) => setPrice(e.target.value)} 
-                      placeholder="Enter your Price"
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="Enter your Price"
           />
         </label>
 
