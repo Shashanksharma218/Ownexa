@@ -16,8 +16,6 @@ router.post("/listing", async (req, res) => {
       const ListingData = req.body;
       await UpdateHolding(ListingData, user); 
       await PostListing(ListingData, user);
-    
-
     return res.status(201).json({
       message: "Listing successful",
       ListingData,

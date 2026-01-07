@@ -102,7 +102,7 @@ const value = totalPriceWei;
       const receipt = await tx.wait();
 
       /* 4️⃣ Backend sync */
-      const res = await fetch(`${API}/transaction`, {
+      const res = await fetch(`${API}/transaction?type=primary`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -115,7 +115,6 @@ const value = totalPriceWei;
           accountaddress: buyerAddress,
           transactionhash: receipt.hash,
           status: "SUCCESS",
-          market: "PRIMARY"
         })
       });
 
