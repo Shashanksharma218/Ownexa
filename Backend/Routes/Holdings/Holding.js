@@ -1,9 +1,10 @@
 import express from "express";
-import { getAuthUser } from "../../Middleware/Middleware.js"; 
+import { getAuthUser } from "../../Middleware/Middleware.js";
 import FindHoldings from "../../Database/Investments/Get/Holdings.js";
 
 const router = express.Router();
 
+/* Get User Holdings */
 router.get("/holdings", async (req, res) => {
   try {
     const user = await getAuthUser(req);

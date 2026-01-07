@@ -15,7 +15,6 @@ router.post("/listing", async (req, res) => {
     }
 
     const listingData = req.body;
-    console.log(listingData);
     const listing = await PostListing(listingData, user);
     await UpdateHolding(listingData, user);
 
@@ -32,6 +31,7 @@ router.post("/listing", async (req, res) => {
   }
 });
 
+/* Get User LISTING */
 router.get("/listings", async (req, res) => {
   try {
     const { status } = req.query;
@@ -60,7 +60,7 @@ router.get("/listings", async (req, res) => {
   }
 });
 
-
+/* Get Property LISTING */
 router.get("/propertylisting/:id", async (req, res) => {
   try {
     const { id: propertyId } = req.params;
@@ -77,10 +77,8 @@ router.get("/propertylisting/:id", async (req, res) => {
 
 })
 
-
-
+/* Get All LISTING */
 router.get("/propertylisting", async (req, res) => {
-
   try {
     const { status } = req.query;
     const propertylisting = await FindListings(

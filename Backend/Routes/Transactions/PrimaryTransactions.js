@@ -8,9 +8,7 @@ import UpdateListing from "../../Database/Listings/Post/UpdateListing.js";
 
 const router = express.Router();
 
-
 /* CREATE TRANSACTION */
-
 router.post("/transaction", async (req, res) => {
   try {
     const { type } = req.query;
@@ -44,7 +42,6 @@ router.post("/transaction", async (req, res) => {
 });
 
 /*  FETCH USER TRANSACTIONS */
-
 router.get("/transaction", async (req, res) => {
   try {
     const { status } = req.query;

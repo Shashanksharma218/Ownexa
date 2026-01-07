@@ -4,6 +4,7 @@ import { getAuthUser } from "../../Middleware/Middleware.js";
 
 const router = express.Router();
 
+/* Get all Status Based Properties */
 router.get("/properties", async (req, res) => {
   try {
     const { status, listed } = req.query;
@@ -24,6 +25,7 @@ router.get("/properties", async (req, res) => {
   }
 });
 
+/* Get Each Property Status Based */
 router.get("/properties/:id", async (req, res) => {
   try {
     const { id: propertyId } = req.params;
@@ -46,7 +48,7 @@ router.get("/properties/:id", async (req, res) => {
   }
 });
 
-
+/* Get Each User Properties */
 router.get("/userproperties", async (req, res) => {
   try {
     const user = await getAuthUser(req);

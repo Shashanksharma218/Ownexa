@@ -5,6 +5,7 @@ import ValidateProperty from "../../Database/Property/Post/ValidateProperty.js";
 
 const router = express.Router();
 
+/* Add Property */
 router.post("/property/add", upload.fields([
   { name: "propertyImages", maxCount: 10 },
   { name: "legalDocuments", maxCount: 10 }
@@ -25,6 +26,7 @@ router.post("/property/add", upload.fields([
   }
 });
 
+/* Validate Property */
 router.put("/property/validate", async (req, res) => {
   try {
     const user = await getAuthUser(req);
@@ -35,7 +37,6 @@ router.put("/property/validate", async (req, res) => {
     }
     const propertyData = req.body;
     const property = await ValidateProperty(propertyData, user);
-
     return res.status(200).json({
       message: "Property validated successfully",
       property
