@@ -50,7 +50,19 @@ const FindListings = async (status) => {
 const FindingSellerListing = async (userId, status) => {
   const { data, error } = await supabase
     .from("listings")
-    .select("*")
+    .select(`
+      id ,
+      token_quantity,
+      price_per_token_inr ,
+      created_at,
+      status,
+      properties (
+      title ,
+      city,
+      state,
+      token_name) ,
+      holdings (
+      avg_price_inr )`)
     .eq("seller_id", userId).eq("status", status).order("updated_at", { ascending: true });
 
   if (error) throw error;

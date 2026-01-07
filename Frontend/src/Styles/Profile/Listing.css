@@ -1,0 +1,156 @@
+/* =========================
+   PAGE
+========================= */
+
+.listings-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.listings-loading,
+.listings-empty {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.listings-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #f9fafb;
+  margin-bottom: 18px;
+}
+
+.listings-section {
+  margin-bottom: 42px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.listing-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 22, 27, 0.92),
+      rgba(16, 18, 24, 0.92)
+    ),
+    rgba(96, 165, 250, 0.04);
+
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  padding: 18px 20px;
+
+  border: 1px solid rgba(96, 165, 250, 0.16);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(96, 165, 250, 0.3);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(96, 165, 250, 0.08);
+}
+
+/* =========================
+   SOLD STATE
+========================= */
+
+.listing-card.sold {
+  opacity: 0.85;
+}
+
+.listing-card.sold:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(96, 165, 250, 0.16);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.listing-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.listing-location {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.listing-token {
+  font-size: 11px;
+  color: #93c5fd;
+}
+
+/* =========================
+   META
+========================= */
+
+.listing-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.listing-meta span {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.listing-meta strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+/* =========================
+   ACTION
+========================= */
+
+.listing-cancel {
+  align-self: flex-end;
+  margin-top: 6px;
+
+  background: transparent;
+  border: none;
+
+  font-size: 13px;
+  color: #f87171;
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .listings-grid {
+    grid-template-columns: 1fr;
+  }
+}

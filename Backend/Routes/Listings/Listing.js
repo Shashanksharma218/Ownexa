@@ -32,8 +32,9 @@ router.post("/listing", async (req, res) => {
   }
 });
 
-router.get("/listing", async (req, res) => {
+router.get("/listings", async (req, res) => {
   try {
+    const { status } = req.query;
     const { tag } = req.query;
     const user = await getAuthUser(req);
     if (!user) {
@@ -44,10 +45,10 @@ router.get("/listing", async (req, res) => {
     }
     let listings;
     if (tag === "buyer") {
-      listings = await FindingBuyerListing(user.id, "SOLD");
+      listings = await FindingBuyerListing(user.id, status);
     }
     if (tag === "seller") {
-      listings = await FindingSellerListing(user.id, "ACTIVE");
+      listings = await FindingSellerListing(user.id, status);
     }
     return res.status(200).json(listings);
 

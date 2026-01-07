@@ -13,6 +13,7 @@ import ProfilePage from "./Pages/Profile/ProfilePage";
 import TransactionsPage from "./Pages/Profile/Transaction";
 import HoldingsPage from "./Pages/Profile/Holdings";
 import SecondaryMarket from "./Pages/Market/Secondary";
+import ListingsPage from "./Pages/Profile/Listings";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
         <Route index element={<ProfilePage />} />
         <Route path="transactions" element={<TransactionsPage/>} />
         <Route path="holdings" element={<HoldingsPage />} />
-        <Route path="listings" element={<h1>Hi This is Listing</h1>} />
+        <Route path="listings" element={<ListingsPage/>} />
         <Route path="properties" element={<h1>Hi this is properties</h1>} />
       </Route>
     </Routes>
