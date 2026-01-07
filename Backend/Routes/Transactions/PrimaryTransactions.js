@@ -4,37 +4,47 @@ import PrimaryTransaction from "../../Database/Transactions/Post/PrimaryTransact
 import FindTransactions from "../../Database/Transactions/Get/FindTransactions.js";
 import Holdings from "../../Database/Investments/Post/Holdings.js";
 import UpdateProperty from "../../Database/Property/Post/UpdateProperty.js";
+import UpdateListing from "../../Database/Listings/Post/UpdateListing.js";
 
 const router = express.Router();
 
-/* ================================
-   CREATE PRIMARY TRANSACTION
-================================ */
+
+/* CREATE TRANSACTION */
+
 router.post("/transaction", async (req, res) => {
   try {
+    const { type } = req.query;
     const user = await getAuthUser(req);
     if (!user) {
       return res.status(401).json({ error: "Unauthorized" });
     }
+    if (!type || !["primary", "secondary"].includes(type)) {
+      return res.status(400).json({ error: "Invalid transaction type" });
+    }
     const transactionData = req.body;
-    const transaction = await PrimaryTransaction( transactionData,  user  ); 
-    const holding = await Holdings(transactionData, user); 
-    const property = await UpdateProperty(transactionData);
+    const transaction = await PrimaryTransaction(transactionData, user, type);
+    const holdings = await Holdings(transactionData, user);
+    if (type === "primary") {
+      await UpdateProperty(transactionData);
+    }
+    if (type === "secondary") {
+      await UpdateListing(transactionData, user, "Sold");
+    }
     return res.status(201).json({
       message: "Transaction successful",
-      transaction
+      transaction,
     });
+
   } catch (err) {
-    console.error("Transaction Failed:", err.message);
+    console.error("Transaction Failed:", err);
     return res.status(400).json({
-      error: err.message
+      error: err.message || "Transaction failed",
     });
   }
 });
 
-/* ================================
-   FETCH USER TRANSACTIONS
-================================ */
+/*  FETCH USER TRANSACTIONS */
+
 router.get("/transaction", async (req, res) => {
   try {
     const { status } = req.query;

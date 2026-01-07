@@ -56,7 +56,8 @@ const Holdings = async (data, user) => {
       wallet_address: wallet,
       property_id: propertyId,
       token_quantity: qty,
-      avg_price_inr: price
+      avg_price_inr: price, 
+      holding_status : true 
     });
 
   if (insertError) throw insertError;
