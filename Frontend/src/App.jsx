@@ -26,7 +26,8 @@ function App() {
       <Route path="/Dashboard" element={<DashboardLayout />}>
         <Route index element={<ProfilePage />} />
         <Route path="transactions" element={<TransactionsPage/>} />
-        <Route path="holdings" element={<HoldingsPage/>} />
+        <Route path="holdings" element={<HoldingsPage />} />
+        <Route path="listings" element={<h1>Hi This is Listing</h1>} />
         <Route path="properties" element={<h1>Hi this is properties</h1>} />
       </Route>
     </Routes>

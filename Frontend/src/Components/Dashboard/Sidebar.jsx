@@ -4,6 +4,7 @@ import {
   Wallet,
   Building2,
   FileText,
+  Store 
 } from "lucide-react";
 
 import "../../Styles/Components/Sidebar.css";
@@ -23,6 +24,14 @@ export default function Sidebar() {
         {({ isActive }) => (
           <button className={isActive ? "active" : ""} aria-label="Holdings">
             <Wallet size={16} />
+          </button>
+        )}
+      </NavLink>
+
+       <NavLink to="/Dashboard/listings">
+        {({ isActive }) => (
+          <button className={isActive ? "active" : ""} aria-label="Listings">
+            <Store size={16} />
           </button>
         )}
       </NavLink>
