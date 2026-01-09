@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../Styles/Market/Primary.css";
 import {
-  MapPin 
+  MapPin
 } from "lucide-react";
 const API = import.meta.env.VITE_API_BASE;
 import SortBar from "../../Components/Dashboard/Filter";
@@ -37,7 +37,7 @@ export default function PrimaryMarket() {
 
   return (
     <div className="primary-page">
-      
+
 
       {properties.length === 0 ? (
         <p className="primary-empty">No validated properties available</p>
@@ -61,7 +61,7 @@ export default function PrimaryMarket() {
               <div className="asset-info">
                 <h3 className="asset-title">{property.title}</h3>
                 <p className="asset-location">
-                 <span><MapPin size={16} /> </span> 
+                  <span><MapPin size={16} /> </span>
                   {property.city}, {property.state}
                 </p>
 

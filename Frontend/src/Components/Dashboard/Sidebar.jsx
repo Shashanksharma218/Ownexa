@@ -1,13 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import {
-  User,
-  Wallet,
-  Building2,
-  FileText,
-  Store,
-  PowerOff,
-  Home
-} from "lucide-react";
+import { User, Wallet, Building2, FileText, Store, PowerOff, Home } from "lucide-react";
 
 import "../../Styles/Components/Sidebar.css";
 
