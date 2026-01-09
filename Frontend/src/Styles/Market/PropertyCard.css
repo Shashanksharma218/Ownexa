@@ -92,7 +92,7 @@
 /* =========================
    DETAILS
 ========================= */
-.property-title {
+.property-main .property-title {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -339,12 +339,9 @@
       rgba(32, 63, 124, 0.95),
       rgba(8, 10, 14, 0.95)
     );
-
-  border: 1px solid rgba(255, 255, 255, 0.04);
-
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    inset 0 1px 0 rgba(0, 0, 0, 0.98);
 }
 
 .primary-market.glass-card {

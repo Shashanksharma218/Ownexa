@@ -214,7 +214,7 @@ export default function PropertyCard() {
             </div>
 
             <div className="property-details">
-              <h2 className="property-title">{property.title}</h2>
+              <p className="property-title">{property.title}</p>
 
               <div className="detail-row full">
                 <MapPin size={16} />
@@ -266,31 +266,31 @@ export default function PropertyCard() {
 
           {/* PRIMARY BUY CARD */}
           <div className="market-card glass-card primary-market">
-  <h3>Primary Market</h3>
+            <h3>Primary Market</h3>
 
-  <div className="primary-buy-row">
-    <input
-      type="number"
-      placeholder="Qty"
-      value={quantity}
-      onChange={(e) => setQuantity(e.target.value)}
-      disabled={buying}
-      min="1"
-    />
+            <div className="primary-buy-row">
+              <input
+                type="number"
+                placeholder="Qty"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                disabled={buying}
+                min="1"
+              />
 
-    <button
-      className="buy-btn compact"
-      onClick={handlePrimaryBuy}
-      disabled={buying || !quantity || Number(quantity) <= 0}
-    >
-      {buying
-        ? "Buying..."
-        : ` ₹${quantity
-            ? (Number(quantity) * property.price_per_token_inr).toLocaleString()
-            : 0}`}
-    </button>
-  </div>
-</div>
+              <button
+                className="buy-btn compact"
+                onClick={handlePrimaryBuy}
+                disabled={buying || !quantity || Number(quantity) <= 0}
+              >
+                {buying
+                  ? "Buying..."
+                  : ` ₹${quantity
+                    ? (Number(quantity) * property.price_per_token_inr).toLocaleString()
+                    : 0}`}
+              </button>
+            </div>
+          </div>
 
         </div>
 
