@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
+import "./App.css"
 import AuthPage from "./Pages/Auth/Auth";
 import AddProperty from "./Pages/Forms/AddProperty";
 import AdminViewPage from "./Pages/Admin/AdminViewPage";
@@ -14,6 +14,7 @@ import TransactionsPage from "./Pages/Profile/Transaction";
 import HoldingsPage from "./Pages/Profile/Holdings";
 import SecondaryMarket from "./Pages/Market/Secondary";
 import ListingsPage from "./Pages/Profile/Listings";
+import MarketLayout from "./Layouts/Market";
 
 function App() {
   return (
@@ -22,15 +23,18 @@ function App() {
       <Route path="/Form" element={<AddProperty />} />
       <Route path="/AdminViewPage" element={<AdminViewPage />} />
       <Route path="/AdminProperty/:id" element={<AdminPropertyPage />} />
-      <Route path="/PrimaryMarket" element={<PrimaryMarket />} />
-      <Route path="/SecondaryMarket" element={<SecondaryMarket />} />
-      <Route path="/Property/:id" element={<PropertyCard />} />
+
+      <Route element={<MarketLayout />}>
+        <Route path="/PrimaryMarket" element={<PrimaryMarket />} />
+        <Route path="/SecondaryMarket" element={<SecondaryMarket />} />
+        <Route path="/Property/:id" element={<PropertyCard />} />
+      </Route>
 
       <Route path="/Dashboard" element={<DashboardLayout />}>
         <Route index element={<ProfilePage />} />
-        <Route path="transactions" element={<TransactionsPage/>} />
+        <Route path="transactions" element={<TransactionsPage />} />
         <Route path="holdings" element={<HoldingsPage />} />
-        <Route path="listings" element={<ListingsPage/>} />
+        <Route path="listings" element={<ListingsPage />} />
         <Route path="properties" element={<h1>Hi this is properties</h1>} />
       </Route>
     </Routes>

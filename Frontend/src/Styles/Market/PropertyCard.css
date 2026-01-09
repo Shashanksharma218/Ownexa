@@ -4,8 +4,7 @@
 .property-buy-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, rgba(96,165,250,0.04), transparent 55%),
-    linear-gradient(180deg, #0f1116, #0b0d12);
+    #0b0d12;
   padding: 36px 22px;
   color: #e5e7eb;
 }
