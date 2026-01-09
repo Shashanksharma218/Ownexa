@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../Styles/Market/Primary.css"
-
+import "../../Styles/Market/Primary.css";
+import {
+  MapPin 
+} from "lucide-react";
 const API = import.meta.env.VITE_API_BASE;
+import SortBar from "../../Components/Dashboard/Filter";
 
 export default function PrimaryMarket() {
   const [properties, setProperties] = useState([]);
@@ -18,10 +21,7 @@ export default function PrimaryMarket() {
         );
         if (!res.ok) throw new Error("Failed to fetch properties");
         const data = await res.json();
-        const sorted = data.sort(
-          (a, b) => new Date(a.validated_at) - new Date(b.validated_at)
-        );
-        setProperties(sorted);
+        setProperties(data);
       } catch (err) {
         console.error(err.message);
       } finally {
@@ -32,53 +32,69 @@ export default function PrimaryMarket() {
   }, []);
 
   if (loading) {
-    return <div className="admin-loading">Loading Primary Market</div>;
+    return <div className="primary-loading">Loading Primary Market…</div>;
   }
 
   return (
-    <div className="admin-pending-page">
-      <h2>Primary Market</h2>
+    <div className="primary-page">
+      <div className="primary-header-row">
+  <h2 className="primary-heading">Primary Market</h2>
+
+  <SortBar
+    options={[
+      { key: "token_quantity", label: "Token" },
+      { key: "created_at", label: "Date" },
+      { key: "price_per_token_inr", label: "Avg Price" },
+    ]}
+    data={properties}
+    onChange={setProperties}
+  />
+</div>
 
       {properties.length === 0 ? (
-        <p className="empty-text">No Validated Properties Available at the moment </p>
+        <p className="primary-empty">No validated properties available</p>
       ) : (
-        <div className="admin-card-grid">
+        <div className="property-grid">
           {properties.map((property) => (
             <div
               key={property.id}
-              className="admin-property-card"
+              className="property-asset-card"
               onClick={() => navigate(`/Property/${property.id}`)}
             >
-              <div className="card-horizontal">
-                <div className="card-image-left">
-                  <img
-                    src={property.property_images?.[0] || "/placeholder-property.jpg"}
-                    alt={property.title}
-                  />
-                </div>
-                <div className="card-content-right">
+              {/* IMAGE WINDOW */}
+              <div className="asset-image-frame">
+                <img
+                  src={property.property_images?.[0] || "/placeholder-property.jpg"}
+                  alt={property.title}
+                />
+              </div>
 
-                  <div className="card-header">
-                    <h3 className="property-title">{property.title}</h3>
-                    <span className="status-badge validated">Validated</span>
-                  </div>
+              {/* INFO */}
+              <div className="asset-info">
+                <h3 className="asset-title">{property.title}</h3>
+                <p className="asset-location">
+                 <span><MapPin size={16} /> </span> 
+                  {property.city}, {property.state}
+                </p>
 
-                  <div className="card-body">
-                    <p>
-                      <span>Token Name :</span> {property.token_name}
-                    </p>
-                    <p>
-                      <span>Token Price :</span> ₹{property.price_per_token_inr}
-                    </p>
-                  </div>
-                  <div className="card-footer">
-                    <span className="submitted-date">
-                      Validated:{" "}
-                      {new Date(property.validated_at).toLocaleDateString()}
+                <div className="asset-metrics">
+                  <div>
+                    <span className="metric-value">
+                      ₹{property.price_per_token_inr}
                     </span>
-                    <span className="review-arrow">→</span>
+                    <span className="metric-label">per token</span>
                   </div>
 
+                  <div>
+                    <span className="metric-value">
+                      {property.token_quantity}
+                    </span>
+                    <span className="metric-label">tokens</span>
+                  </div>
+                </div>
+
+                <div className="asset-cta">
+                  View Property →
                 </div>
               </div>
             </div>
