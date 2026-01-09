@@ -125,86 +125,75 @@ export default function PropertyCard() {
 
 
   const handleSecondaryBuy = async (listing) => {
-  try {
-    if (!window.ethereum) {
-      throw new Error("MetaMask not found");
+    try {
+      if (!window.ethereum) {
+        throw new Error("MetaMask not found");
+      }
+
+      setBuying(true);
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const buyerAddress = await signer.getAddress();
+
+      // price per token → ETH
+      const pricePerTokenWei = ethers.parseEther(
+        (Number(listing.price_per_token_inr) / ETH_INR).toFixed(18)
+      );
+
+      // total = price * listing quantity
+      const basePriceWei =
+        pricePerTokenWei * BigInt(listing.token_quantity);
+
+      // 2% commission
+      const commissionWei = (basePriceWei * 2n) / 100n;
+      const totalPriceWei = basePriceWei + commissionWei;
+
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        PropertyTokenABI,
+        signer
+      );
+
+      const tx = await contract.buyListing(
+        listing.listing_blockchain_id,
+        { value: totalPriceWei }
+      );
+
+      const receipt = await tx.wait();
+
+      // sync backend
+      const res = await fetch(`${API}/transaction?type=secondary`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property.id,
+          blockchainId: property.blockchain_id,
+          tokenName: property.token_name,
+          tokenQuantity: listing.token_quantity,
+          pricePerTokenInr: listing.price_per_token_inr,
+          listingId: listing.id,
+          accountaddress: buyerAddress,
+          transactionhash: receipt.hash,
+          status: "SUCCESS",
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Transaction sync failed");
+      }
+
+      alert("Secondary tokens bought successfully!");
+
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Secondary buy failed");
+    } finally {
+      setBuying(false);
     }
-
-    setBuying(true);
-
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    const buyerAddress = await signer.getAddress();
-
-    // price per token → ETH
-    const pricePerTokenWei = ethers.parseEther(
-      (Number(listing.price_per_token_inr) / ETH_INR).toFixed(18)
-    );
-
-    // total = price * listing quantity
-    const basePriceWei =
-      pricePerTokenWei * BigInt(listing.token_quantity);
-
-    // 2% commission
-    const commissionWei = (basePriceWei * 2n) / 100n;
-    const totalPriceWei = basePriceWei + commissionWei;
-
-    const contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      PropertyTokenABI,
-      signer
-    );
-
-    const tx = await contract.buyListing(
-      listing.listing_blockchain_id,
-      { value: totalPriceWei }
-    );
-
-    const receipt = await tx.wait();
-
-    // sync backend
-    const res = await fetch(`${API}/transaction?type=secondary`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        propertyId: property.id,
-        blockchainId: property.blockchain_id,
-        tokenName: property.token_name,
-        tokenQuantity: listing.token_quantity,
-        pricePerTokenInr: listing.price_per_token_inr, 
-        listingId : listing.id , 
-        accountaddress: buyerAddress,
-        transactionhash: receipt.hash,
-        status: "SUCCESS",
-      }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || "Transaction sync failed");
-    }
-
-    alert("Secondary tokens bought successfully!");
-
-  } catch (err) {
-    console.error(err);
-    alert(err.message || "Secondary buy failed");
-  } finally {
-    setBuying(false);
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
+  };
 
   if (loading) return <div className="page-loading">Loading property...</div>;
   if (!property) return null;
@@ -213,89 +202,102 @@ export default function PropertyCard() {
     <div className="property-buy-page">
       <div className="property-buy-container">
 
-        <div className="property-main">
-          <div className="property-image-grid">
-            {property.property_images?.map((img, idx) => (
-              <img key={idx} src={img} alt="property" />
-            ))}
+        {/* LEFT COLUMN */}
+        <div className="property-left">
+
+          {/* PROPERTY DETAIL CARD */}
+          <div className="property-main glass-card">
+            <div className="property-image-grid">
+              {property.property_images?.map((img, idx) => (
+                <img key={idx} src={img} alt="property" />
+              ))}
+            </div>
+
+            <div className="property-details">
+              <h2 className="property-title">{property.title}</h2>
+
+              <div className="detail-row full">
+                <MapPin size={16} />
+                <span>
+                  {property.address_line}, {property.city}, {property.state} – {property.pincode}
+                </span>
+              </div>
+
+              <div className="details-grid">
+                <div className="detail-item">
+                  <Home size={16} />
+                  <span>{property.bhk} BHK</span>
+                </div>
+
+                <div className="detail-item">
+                  <Building2 size={16} />
+                  <span>{property.property_type}</span>
+                </div>
+
+                <div className="detail-item">
+                  <Ruler size={16} />
+                  <span>{property.built_up_area_sqft} sqft</span>
+                </div>
+
+                <div className="detail-item">
+                  <Coins size={16} />
+                  <span>{property.token_name}</span>
+                </div>
+
+                <div className="detail-item">
+                  <IndianRupee size={16} />
+                  <span>₹{property.price_per_token_inr} / token</span>
+                </div>
+
+                <div className="detail-item">
+                  <Layers size={16} />
+                  <span>{property.token_quantity} tokens left</span>
+                </div>
+              </div>
+
+              <div className="detail-row full">
+                <FileText size={16} />
+                <span>
+                  {property.registry_name} • {property.registry_number}
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div className="property-details">
-            <h2 className="property-title">{property.title}</h2>
+          {/* PRIMARY BUY CARD */}
+          <div className="market-card glass-card primary-market">
+  <h3>Primary Market</h3>
 
-            <div className="detail-row full">
-              <MapPin size={16} />
-              <span>
-                {property.address_line}, {property.city}, {property.state} – {property.pincode}
-              </span>
-            </div>
+  <div className="primary-buy-row">
+    <input
+      type="number"
+      placeholder="Qty"
+      value={quantity}
+      onChange={(e) => setQuantity(e.target.value)}
+      disabled={buying}
+      min="1"
+    />
 
-            <div className="details-grid">
+    <button
+      className="buy-btn compact"
+      onClick={handlePrimaryBuy}
+      disabled={buying || !quantity || Number(quantity) <= 0}
+    >
+      {buying
+        ? "Buying..."
+        : ` ₹${quantity
+            ? (Number(quantity) * property.price_per_token_inr).toLocaleString()
+            : 0}`}
+    </button>
+  </div>
+</div>
 
-              <div className="detail-item">
-                <Home size={16} />
-                <span>{property.bhk} BHK</span>
-              </div>
-
-              <div className="detail-item">
-                <Building2 size={16} />
-                <span>{property.property_type}</span>
-              </div>
-
-              <div className="detail-item">
-                <Ruler size={16} />
-                <span>{property.built_up_area_sqft} sqft</span>
-              </div>
-
-              <div className="detail-item">
-                <Coins size={16} />
-                <span>{property.token_name}</span>
-              </div>
-
-              <div className="detail-item">
-                <IndianRupee size={16} />
-                <span>{property.price_per_token_inr} / token</span>
-              </div>
-
-              <div className="detail-item">
-                <Layers size={16} />
-                <span>{property.token_quantity} tokens left</span>
-              </div>
-
-            </div>
-
-            <div className="detail-row full">
-              <FileText size={16} />
-              <span>
-                {property.registry_name} • {property.registry_number}
-              </span>
-            </div>
-
-          </div>
         </div>
-        <div className="property-market">
-          <div className="market-card primary-market">
-            <h3>Primary Market</h3>
-            <p className="price">
-              ₹{property.price_per_token_inr} / token
-            </p>
 
-            <input
-              type="number"
-              placeholder="Enter quantity"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              disabled={buying}
-            />
-            <button
-              className="buy-btn"
-              onClick={handlePrimaryBuy}
-              disabled={buying}
-            >
-              {buying ? "Buying..." : "Buy Primary"}
-            </button>
-          </div>
-          <div className="market-card secondary-market">
+        {/* RIGHT COLUMN */}
+        <div className="property-right">
+
+          <div className="market-card glass-card secondary-market">
             <h3>Secondary Market</h3>
 
             {listings && listings.length > 0 ? (
@@ -317,12 +319,12 @@ export default function PropertyCard() {
                     </div>
 
                     <button
-  className="sec-buy-btn"
-  disabled={buying}
-  onClick={() => handleSecondaryBuy(listing)}
->
-  {buying ? "Buying..." : "Buy"}
-</button>
+                      className="sec-buy-btn"
+                      disabled={buying}
+                      onClick={() => handleSecondaryBuy(listing)}
+                    >
+                      {buying ? "Buying..." : "Buy"}
+                    </button>
 
                   </div>
                 ))}
