@@ -5,7 +5,8 @@ import {
   Building2,
   FileText,
   Store,
-  PowerOff
+  PowerOff,
+  Home
 } from "lucide-react";
 
 import "../../Styles/Components/Sidebar.css";
@@ -66,6 +67,14 @@ export default function Sidebar() {
         {({ isActive }) => (
           <button className={isActive ? "active" : ""} aria-label="Transactions">
             <FileText size={16} />
+          </button>
+        )}
+      </NavLink>
+
+      <NavLink to="/PrimaryMarket">
+        {({ isActive }) => (
+          <button className={isActive ? "active" : ""} aria-label="Transactions">
+            <Home size={16} />
           </button>
         )}
       </NavLink>
