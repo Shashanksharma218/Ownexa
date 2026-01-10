@@ -5,7 +5,7 @@ import CreateUser from "../../Database/Users/CreateUser.js";
 import LoginUser from "../../Database/Users/LoginUser.js";
 import supabase from "../../Database/SupabaseClient.js";
 import { FindUser  } from "../../Database/Users/FindUser.js";
-import { getAuthUser, FindRole } from "../../Middleware/Middleware.js";
+import { getAuthUser  } from "../../Middleware/Middleware.js";
 
 dotenv.config();
 const router = express.Router();

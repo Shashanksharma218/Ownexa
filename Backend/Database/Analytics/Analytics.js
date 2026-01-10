@@ -1,4 +1,4 @@
-import supabase from "../SupabaseClient";
+import supabase from "../SupabaseClient.js";
 
 const Analytics = async () => {
   const { data, error } = await supabase
