@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../Styles/Profile/ProfilePage.css"
-
+import { useNavigate } from "react-router";
 const API = import.meta.env.VITE_API_BASE;
 
 function formatTimeAgo(date) {
@@ -15,6 +15,7 @@ function formatTimeAgo(date) {
 }
 
 export default function ProfilePage() {
+     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [timeSinceJoined, setTimeSinceJoined] = useState("");
     const [user, setUser] = useState(null);
@@ -134,6 +135,18 @@ export default function ProfilePage() {
                     <Metric label="Holdings" value={holdings.length} />
                     <Metric label="Properties" value={listedProperties.length} />
                 </div>
+
+                 {user?.role === "Admin" && (
+    <div className="admin-entry">
+      <button
+        className="admin-panel-btn"
+        onClick={() => navigate("/admin")}
+      >
+        View Admin 
+      </button>
+    </div>
+  )}
+
 
                 {timeSinceJoined && (
                     <div className="join-timer-corner">

@@ -20,7 +20,7 @@ function App() {
     <Routes>
       <Route path="/" element={<AuthPage />} />
       <Route path="/Form" element={<AddProperty />} />
-      <Route path="/AdminViewPage" element={<AdminViewPage />} />
+      <Route path="/admin" element={<AdminViewPage />} />
       <Route path="/AdminProperty/:id" element={<AdminPropertyPage />} />
 
       <Route element={<MarketLayout />}>

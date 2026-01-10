@@ -22,6 +22,7 @@
   position: relative;
   grid-row: span 2;
   min-height: 480px;
+  max-height:480px ;
   padding-bottom: 180px;
   margin-top: 40px;
   overflow: visible;
@@ -668,4 +669,29 @@
     margin: 16px auto 0;
     width: fit-content;
   }
+}
+
+.admin-entry {
+  margin-top: 20px;
+  display: flex;
+  margin-left: 42px ;
+  justify-content: flex-start; /* ← shift left */
+}
+
+.admin-panel-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: rgba(250, 204, 21, 0.12);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.admin-panel-btn:hover {
+  background: rgba(250, 204, 21, 0.2);
+  transform: translateY(-1px);
 }
