@@ -14,6 +14,7 @@ import HoldingsPage from "./Pages/Profile/Holdings";
 import SecondaryMarket from "./Pages/Market/Secondary";
 import ListingsPage from "./Pages/Profile/Listings";
 import MarketLayout from "./Layouts/Market";
+import PropertiesPage from "./Pages/Profile/Properties";
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
         <Route path="transactions" element={<TransactionsPage />} />
         <Route path="holdings" element={<HoldingsPage />} />
         <Route path="listings" element={<ListingsPage />} />
-        <Route path="properties" element={<h1>Hi this is properties</h1>} />
+        <Route path="properties" element={<PropertiesPage/>} />
       </Route>
     </Routes>
   );

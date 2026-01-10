@@ -174,7 +174,7 @@ export default function HoldingsPage() {
                 <div className="holding-image">
                   <img src={image} alt={h.properties.title} />
                   <span
-                    className={`holding-status ${h.properties.status}`}
+                    className={`holding-status ${h.properties.status.toUpperCase()}`}
                   >
                     {h.properties.status}
                   </span>

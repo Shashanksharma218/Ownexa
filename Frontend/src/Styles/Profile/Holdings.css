@@ -65,12 +65,13 @@
 }
 
 .holding-status.ACTIVE,
-.holding-status.validated {
+.holding-status.VALIDATED {
   background: rgba(34, 197, 94, 0.18);
   color: #22c55e;
 }
 
-.holding-status.INACTIVE {
+.holding-status.INACTIVE,
+.holding-status.REJECTED {
   background: rgba(239, 68, 68, 0.18);
   color: #ef4444;
 }
