@@ -6,8 +6,8 @@ import jwt from "jsonwebtoken";
 import CreateUser from "../../Database/Users/CreateUser.js";
 import LoginUser from "../../Database/Users/LoginUser.js";
 import supabase from "../../Database/SupabaseClient.js";
-import FindUser from "../../Database/Users/FindUser.js";
-
+import { FindUser, FindAllUser } from "../../Database/Users/FindUser.js";
+import { getAuthUser, FindRole } from "../../Middleware/Middleware.js";
 
 dotenv.config();
 const router = express.Router();
@@ -127,5 +127,29 @@ router.get("/auth/me", async (req, res) => {
   }
 });
 
+/* All User Fetch */
+router.get("/users", async (req, res) => {
+  try {
+    const user = await getAuthUser(req);
+    const role = await FindRole(user.id);
+    if (role !== "Admin") {
+      return res.status(403).json({
+        error: "Forbidden"
+      });
+    }
+    const users = await FindAllUser();
+    return res.status(200).json({
+      loggedIn: true,
+      users
+    });
+  } catch (err) {
+    console.error("Error Faced:", err.message);
+
+    return res.status(500).json({
+      loggedIn: false,
+      error: "Something went wrong"
+    });
+  }
+});
 
 export default router;

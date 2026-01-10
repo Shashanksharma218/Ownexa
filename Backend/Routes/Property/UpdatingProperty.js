@@ -1,6 +1,6 @@
 import express from "express";
 import AddProperty from "../../Database/Property/Post/AddProperty.js";
-import { getAuthUser, upload } from "../../Middleware/Middleware.js";
+import { FindRole, getAuthUser, upload } from "../../Middleware/Middleware.js";
 import ValidateProperty from "../../Database/Property/Post/ValidateProperty.js";
 
 const router = express.Router();
@@ -29,8 +29,9 @@ router.post("/property/add", upload.fields([
 /* Validate Property */
 router.put("/property/validate", async (req, res) => {
   try {
-    const user = await getAuthUser(req);
-    if (user.email !== "dhruvnkejriwal@gmail.com") {
+    const user = await getAuthUser(req); 
+    const role = await FindRole(user.id); 
+    if (role != "Admin") {
       return res.status(403).json({
         error: "Forbidden"
       });

@@ -11,6 +11,18 @@ export const getAuthUser = async (req) => {
   return data.user;
 };
 
+export const FindRole = async (userId) => {
+ const { data, error } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", userId)
+    .single(); 
+
+  if (error) throw error;
+
+  return data.role;
+};
+
 const storage = multer.memoryStorage();
 
 export const upload = multer({
