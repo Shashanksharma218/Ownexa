@@ -1,0 +1,166 @@
+/* =========================
+   HOME BASE
+========================= */
+.Home {
+  position: relative;
+  min-height: 100vh;
+  background: #0b0d12;
+  overflow: hidden;
+  color: white;
+  font-family: "Inter", sans-serif;
+}
+
+/* =========================
+   BACKGROUND TEXT
+========================= */
+.Home-bgText {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: "Satoshi", sans-serif;
+  font-weight: 900;
+  font-size: clamp(4.5rem, 10vw, 10rem);
+  line-height: 0.95;
+  opacity: 0.90; /* IMPORTANT: not 0.9 */
+  pointer-events: none;
+  user-select: none;
+}
+
+.Home-bgText span {
+  white-space: nowrap;
+}
+
+/* =========================
+   PANELS WRAPPER
+========================= */
+.Home-panels {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 220px;
+}
+
+/* =========================
+   GLASS PANEL BASE
+========================= */
+/* =========================
+   GLASS PANEL BASE (HORIZONTAL)
+========================= */
+.Home-panel {
+  position: relative;
+  width: 420px;      /* wider */
+  height: 260px;     /* shorter */
+  padding: 22px 26px;
+  border-radius: 26px;
+
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  box-shadow:
+    0 0 80px rgba(59, 130, 246, 0.12),
+    inset 0 0 24px rgba(255, 255, 255, 0.03);
+
+  transition: transform 0.6s ease;
+}
+
+/* =========================
+   PANEL TILT (CREDIT CARD FEEL)
+========================= */
+.Home-panelLeft {
+  transform: perspective(1200px) rotateY(8deg) rotateZ(70deg) rotateX(30deg)
+}
+
+.Home-panelRight {
+  transform: perspective(1200px) rotateY(-8deg) rotateZ(-60deg) rotateX(30deg)
+}
+
+/* =========================
+   OPTIONAL HOVER LIFT (PREMIUM)
+========================= */
+.Home-panel.Home-panelLeft:hover {
+  transform: perspective(1200px) rotateY(40deg) rotateZ(0deg) translateZ(30px) translateY(-100px)
+}
+.Home-panel.Home-panelRight:hover {
+  transform: perspective(1200px) rotateY(-40deg) rotateZ(0deg) translateY(-100px) translateZ(30px)
+}
+
+/* =========================
+   PANEL CONTENT
+========================= */
+.Home-brand {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  opacity: 0.85;
+  color: aqua;
+}
+
+/* AMOUNT AREA — CENTER OF CARD */
+.Home-amount {
+  font-family: "Satoshi", sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.14em;
+
+}
+
+.Home-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  opacity: 0.7;
+   
+}
+
+/* STATS (CARD 2) */
+.Home-stats span {
+  display: block;
+  margin: 10px 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+/* FOOTER (HORIZONTAL — INTENTIONAL) */
+.Home-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  opacity: 0.75;
+  color:aqua ; 
+}
+
+.Home-live {
+  opacity: 1;
+}
+
+/* =========================
+   SUBTLE BLUE EDGE LIGHT
+========================= */
+.Home-panel::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(59, 130, 246, 0.12),
+    transparent 60%
+  );
+  opacity: 0.6;
+}

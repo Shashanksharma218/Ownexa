@@ -15,16 +15,18 @@ import SecondaryMarket from "./Pages/Market/Secondary";
 import ListingsPage from "./Pages/Profile/Listings";
 import MarketLayout from "./Layouts/Market";
 import PropertiesPage from "./Pages/Profile/Properties";
+import Home from "./Components/Home";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AuthPage />} />
+      <Route path="/Auth" element={<AuthPage />} />
       <Route path="/Form" element={<AddProperty />} />
       <Route path="/admin" element={<AdminViewPage />} />
       <Route path="/AdminProperty/:id" element={<AdminPropertyPage />} />
 
-      <Route element={<MarketLayout />}>
+      <Route path="/" element={<MarketLayout />}>
+            <Route index element={<Home/>} />
         <Route path="/PrimaryMarket" element={<PrimaryMarket />} />
         <Route path="/SecondaryMarket" element={<SecondaryMarket />} />
         <Route path="/Property/:id" element={<PropertyCard />} />
