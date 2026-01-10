@@ -2,39 +2,33 @@
    PAGE
 ========================= */
 
-.market-page {
+.sm-page {
   min-height: 100vh;
-  padding: 32px;
-  background-color:   #0b0d12;
+  padding: 24px;
+  background-color: #0b0d12;
   color: #e5e7eb;
   font-family: "Inter", system-ui;
 }
 
-.market-page h2 {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
-
 /* =========================
-   GRID
+   GRID (SMALLER CARDS)
 ========================= */
 
-.market-grid {
+.sm-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
 /* =========================
-   CARD
+   CARD (COMPACT)
 ========================= */
 
-.market-card {
-  background: #1c1c1e;
-  border-radius: 18px;
-  padding: 20px;
-  border: 1px solid #2c2c2e;
+.sm-card {
+  background: #09090b;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #3df1376d;
   cursor: pointer;
 
   transition:
@@ -43,57 +37,51 @@
     border-color 0.15s ease;
 }
 
-.market-card:hover {
+.sm-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  border-color: #3a3a3c;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  border-color: #3df137ed
 }
 
 /* =========================
    HORIZONTAL LAYOUT
 ========================= */
 
-.market-card-row {
+.sm-card {
   display: flex;
-  gap: 14px;
+  gap: 12px;
+  height: 150px;
 }
 
 /* =========================
-   IMAGE STACK
+   IMAGE
 ========================= */
 
-.market-card-images {
-  width: 110px;
+.sm-thumb {
+  width: 90px;
+  height: 100%;
   flex-shrink: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  border-radius: 14px;
+  border-radius: 10px;
   overflow: hidden;
   background: #0f0f11;
-  padding: 6px;
 }
 
-.market-card-images img {
+.sm-thumb img {
   width: 100%;
-  height: 50%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
-
   transition: transform 0.25s ease;
 }
 
-.market-card:hover .market-card-images img {
-  transform: scale(1.04);
+.sm-card:hover .sm-thumb img {
+  transform: scale(1.05);
 }
 
 /* =========================
    CONTENT
 ========================= */
 
-.market-card-content {
+.sm-info {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -101,80 +89,101 @@
 
 /* HEADER */
 
-.market-card-header {
+.sm-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
+  align-items: center;
 }
 
-.market-card-title {
-  font-size: 16px;
+.sm-title {
+  font-size: 14px;
   font-weight: 600;
   color: #f9fafb;
-  max-width: 85%;
+  max-width: 75%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* STATUS */
 
-.market-status-badge {
-  font-size: 11px;
+.sm-badge {
+  font-size: 10px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: 999px;
   letter-spacing: 0.04em;
 }
 
-.market-status-badge.active {
+.sm-active {
   background: rgba(34, 197, 94, 0.15);
   color: #22c55e;
 }
 
-/* BODY */
+/* =========================
+   META / BODY
+========================= */
 
-.market-card-body p {
-  font-size: 13px;
-  color: #d1d5db;
-  margin-bottom: 6px;
+.sm-meta {
+  margin-top: 8px;
+  display: grid;
+  gap: 4px;
 }
 
-.market-card-body span {
+.sm-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #d1d5db;
+}
+
+.sm-row span {
   color: #9ca3af;
 }
 
-/* FOOTER */
+.sm-row.highlight {
+  color: #38bdf8;
+  font-weight: 600;
+}
 
-.market-card-footer {
+/* =========================
+   FOOTER
+========================= */
+
+.sm-footer {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 10px;
+  padding-top: 6px;
 }
 
-.market-card-date {
-  font-size: 12px;
+.sm-date {
+  font-size: 11px;
   color: #9ca3af;
 }
 
-.market-card-arrow {
-  font-size: 18px;
+.sm-cta {
+  font-size: 13px;
   color: #9ca3af;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.market-card:hover .market-card-arrow {
+.sm-card:hover .sm-cta {
   transform: translateX(4px);
+  color: #38bdf8;
 }
 
 /* =========================
    EMPTY / LOADING
 ========================= */
 
-.market-empty,
-.market-loading {
+.sm-empty,
+.sm-loading {
   font-size: 14px;
   color: #9ca3af;
+  text-align: center;
+  margin-top: 100px;
 }
 
 /* =========================
@@ -182,17 +191,34 @@
 ========================= */
 
 @media (max-width: 768px) {
-  .market-card-row {
-    flex-direction: column;
+  .sm-card {
+    height: auto;
   }
+}
 
-  .market-card-images {
-    width: 100%;
-    flex-direction: row;
-    height: 120px;
-  }
+.sm-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0; /* 🔥 REQUIRED */
+}
 
-  .market-card-images img {
-    height: 100%;
-  }
+.sm-title {
+  flex: 1;
+  min-width: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sm-info {
+  flex: 1;
+  min-width: 0; /* 🔥 MOST IMPORTANT LINE */
+  display: flex;
+  flex-direction: column;
+}
+
+.sm-badge {
+  flex-shrink: 0;        /* never shrink */
+  white-space: nowrap;
 }

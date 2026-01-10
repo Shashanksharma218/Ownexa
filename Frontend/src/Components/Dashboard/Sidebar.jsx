@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { User, Wallet, Building2, FileText, Store, PowerOff, Home } from "lucide-react";
+import { User, Wallet, Building2, FileText, Store, PowerOff, Home, Pen } from "lucide-react";
 
 import "../../Styles/Components/Sidebar.css";
 
@@ -65,8 +65,26 @@ export default function Sidebar() {
 
       <NavLink to="/PrimaryMarket">
         {({ isActive }) => (
-          <button className={isActive ? "active" : ""} aria-label="Transactions">
+          <button className={isActive ? "active" : ""} aria-label="Transactions" style={{ color: "#1673c4ff" }}
+           onMouseEnter={(e) => {
+          e.currentTarget.style.background = "rgba(28, 119, 223, 0.25)";  
+        }}  onMouseLeave={(e) => {
+          e.currentTarget.style.background = "transparent";
+        }}>
             <Home size={16} />
+          </button>
+        )}
+      </NavLink>
+
+      <NavLink to="/Form">
+        {({ isActive }) => (
+          <button className={isActive ? "active" : ""} aria-label="Transactions" style={{ color: "#2d9613ff" }}
+            onMouseEnter={(e) => {
+          e.currentTarget.style.background = "rgba(38, 220, 141, 0.25)";  
+        }}  onMouseLeave={(e) => {
+          e.currentTarget.style.background = "transparent";
+        }} >
+            <Pen size={16} />
           </button>
         )}
       </NavLink>

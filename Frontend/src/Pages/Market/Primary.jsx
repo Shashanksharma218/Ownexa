@@ -5,7 +5,6 @@ import {
   MapPin
 } from "lucide-react";
 const API = import.meta.env.VITE_API_BASE;
-import SortBar from "../../Components/Dashboard/Filter";
 
 export default function PrimaryMarket() {
   const [properties, setProperties] = useState([]);
@@ -37,8 +36,6 @@ export default function PrimaryMarket() {
 
   return (
     <div className="primary-page">
-
-
       {properties.length === 0 ? (
         <p className="primary-empty">No validated properties available</p>
       ) : (
