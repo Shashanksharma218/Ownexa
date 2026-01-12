@@ -649,3 +649,152 @@
     opacity: 0.5;
   }
 }
+
+
+
+
+
+@media (max-width: 1200px) {
+  .Home-panels {
+    gap: 120px;
+  }
+
+  .Home-panel {
+    width: 360px;
+    height: 230px;
+  }
+
+  .Flow-cards {
+    gap: 90px;
+  }
+
+  .Lifecycle {
+    grid-template-columns: 1fr;
+    gap: 120px;
+  }
+
+  .Lifecycle-right {
+    margin-left: 0;
+    transform: translateY(0);
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .Lifecycle-emphasis::after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .Home-panels {
+    flex-direction: column;
+    gap: 80px;
+    padding-top: 120px;
+  }
+
+  .Home-panelLeft,
+  .Home-panelRight {
+    transform: none;
+  }
+
+  .Flow-cards {
+    flex-wrap: wrap;
+    gap: 60px;
+  }
+
+  .Flow-cardMoney {
+    width: 240px;
+    height: 150px;
+  }
+
+  .Lifecycle-principle {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 60px;
+    text-align: center;
+  }
+
+  .Lifecycle-curve,
+  .Lifecycle-states {
+    height: 60%;
+  }
+}
+
+
+@media (max-width: 600px) {
+  /* HERO */
+  .Home-bgText {
+    font-size: clamp(2.8rem, 12vw, 4rem);
+    opacity: 0.12;
+  }
+
+  .Home-panels {
+    min-height: auto;
+    padding-bottom: 80px;
+  }
+
+  .Home-panel {
+    width: 90%;
+    height: auto;
+  }
+
+  /* FLOW */
+  .Flow-title {
+    font-size: 26px;
+    letter-spacing: 0.18em;
+  }
+
+  .Flow-cards {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  /* LIFECYCLE */
+  .Lifecycle {
+    padding: 80px 6vw;
+  }
+
+  .Lifecycle-left {
+    min-height: 500px;
+  }
+
+  /* Curve simplified */
+  .Lifecycle-curve {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Stack states vertically */
+  .Lifecycle-state {
+    left: 50% !important;
+    transform: translateX(-50%);
+  }
+
+  .Lifecycle-state[data-step="1"] { top: 18%; }
+  .Lifecycle-state[data-step="2"] { top: 34%; }
+  .Lifecycle-state[data-step="3"] { top: 50%; }
+  .Lifecycle-state[data-step="4"] { top: 66%; }
+
+  /* Right text */
+  .Lifecycle-right {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    letter-spacing: 0.12em;
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .Lifecycle-emphasis {
+    font-size: 1.3rem;
+    letter-spacing: 0.14em;
+  }
+
+  .Lifecycle-emphasis::after {
+    width: 160px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
