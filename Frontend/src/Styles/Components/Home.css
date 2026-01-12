@@ -478,7 +478,9 @@
   font-size: 2rem;
   letter-spacing: 0.22em;
 }
-
+.line1:hover{
+  opacity: 1;
+}
 .span2 {
   font-size: 6rem;
   letter-spacing: 0.08em;  

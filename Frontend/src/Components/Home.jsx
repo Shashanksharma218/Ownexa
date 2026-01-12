@@ -205,9 +205,9 @@ export default function Home() {
 
         {/* RIGHT — PHILOSOPHY */}
         <div className="Lifecycle-right">
-          <p>REAL ASSETS ARE ILLIQUID.</p>
-          <p>CRYPTO IS VOLATILE.</p>
-          <p>TRADITIONAL SYSTEMS ARE CLOSED.</p>
+          <p className="line1">REAL ASSETS ARE ILLIQUID.</p>
+          <p className="line1">CRYPTO IS VOLATILE.</p>
+          <p className="line1">TRADITIONAL SYSTEMS ARE CLOSED.</p>
 
           <br />
 
