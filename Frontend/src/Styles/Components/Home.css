@@ -234,7 +234,7 @@
     box-shadow 0.4s ease,
     border-color 0.4s ease,
     background 0.4s ease;
-animation: Flow-react 10s linear infinite
+   animation: Flow-react 10s linear infinite ; 
 }
 
 /* =========================
@@ -322,7 +322,7 @@ animation: Flow-react 10s linear infinite
    FLOW REACTION (WHEN ACTIVE)
 ========================= */
 .Flow-cardMoney {
-  animation: Flow-moneyPulse 7s linear infinite;
+  animation: Flow-react 10s linear infinite ; 
 }
 
 /* Sync with flow timing */
@@ -379,14 +379,12 @@ animation: Flow-react 10s linear infinite
 ========================= */
 @keyframes Flow-react {
   0% {
-    transform: translateY(0) translateZ(0);
     box-shadow: none;
     border-color: rgba(255, 255, 255, 0.14);
   }
 
   /* FLOW TOUCHES CARD */
   15% {
-    transform: translateY(-12px) translateZ(20px);
     box-shadow:
       0 18px 40px rgba(0, 0, 0, 0.35),
       0 0 22px rgba(0, 255, 255, 0.35);
@@ -395,13 +393,11 @@ animation: Flow-react 10s linear infinite
 
   /* SETTLE BACK */
   30% {
-    transform: translateY(0) translateZ(0);
     box-shadow: none;
     border-color: rgba(255, 255, 255, 0.14);
   }
 
   100% {
-    transform: translateY(0) translateZ(0);
     box-shadow: none;
     border-color: rgba(255, 255, 255, 0.14);
   }
