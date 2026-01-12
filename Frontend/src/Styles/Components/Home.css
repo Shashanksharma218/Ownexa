@@ -3,7 +3,6 @@
 ========================= */
 .Home {
   position: relative;
-  min-height: 100vh;
   background: #0b0d12;
   overflow: hidden;
   color: white;
@@ -164,3 +163,252 @@
   );
   opacity: 0.6;
 }
+
+/* =========================
+   VALUE FLOW SECTION
+========================= */
+.Flow {
+  position: relative;
+  background: #0b0d12;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 80px;
+  overflow: hidden;
+  color: white ;
+}
+
+/* =========================
+   SECTION TITLE
+========================= */
+.Flow-title {
+  text-align: center;
+  font-size: 40px;
+  letter-spacing: 0.25em;
+  opacity: 0.8;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* =========================
+   FLOW CARDS WRAPPER
+========================= */
+/* =========================
+   FLOW CARDS WRAPPER (UNCHANGED)
+========================= */
+.Flow-cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 140px;
+  z-index: 2;
+}
+
+/* =========================
+   FLOW CARD BASE — REFINED
+========================= */
+.Flow-card {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  padding: 20px;
+  border-radius: 22px;
+  /* Softer glass */
+  backdrop-filter: blur(18px) saturate(110%);
+  background: rgba(255, 255, 255, 0.025);
+
+  /* Lighter border */
+  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  /* Very subtle depth */
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+
+  transition:
+    box-shadow 0.4s ease,
+    border-color 0.4s ease,
+    background 0.4s ease;
+animation: Flow-react 10s linear infinite
+}
+
+/* =========================
+   MONEY FLOW CARD — MORE PREMIUM
+========================= */
+.Flow-cardMoney {
+  position: relative;
+  width: 260px;
+  height: 160px;
+  padding: 18px 20px;
+  border-radius: 22px;
+
+  /* Cleaner, clearer glass */
+  backdrop-filter: blur(20px) saturate(115%);
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Reduced glow, more realism */
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.06);
+
+  transition:
+    box-shadow 0.4s ease,
+    border-color 0.4s ease,
+    background 0.4s ease;
+}
+
+/* =========================
+   TOP ROW (0X | ETH)
+========================= */
+.Flow-cardTop {
+    color: aqua;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Flow-cardIssuer,
+.Flow-cardNetwork {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  opacity: 0.75;
+}
+
+/* =========================
+   MASKED NUMBER
+========================= */
+.Flow-cardNumber {
+  margin-top: 8px;
+  font-family: "Satoshi", "Inter", -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.25em;
+  opacity: 0.9;
+}
+
+/* =========================
+   STATUS (LIQUID)
+========================= */
+.Flow-cardStatus {
+
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  opacity: 0.7;
+}
+
+/* =========================
+   BOTTOM META (IN FLOW)
+========================= */
+.Flow-cardMeta {
+    color: aqua;
+  align-self: flex-end;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  opacity: 0.65;
+}
+
+/* =========================
+   FLOW REACTION (WHEN ACTIVE)
+========================= */
+.Flow-cardMoney {
+  animation: Flow-moneyPulse 7s linear infinite;
+}
+
+/* Sync with flow timing */
+.Flow-cardMoney[data-flow="1"] {
+  animation-delay: 0s;
+}
+
+
+/* =========================
+   CONTINUOUS FLOW GLOW
+========================= */
+.Flow-glow {
+  position: absolute;
+  top: 50%;
+  left: -45%;
+  width: 190%;
+  height: 120px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(20, 93, 212, 0.045),
+    transparent
+  );
+
+  filter: blur(55px);
+  transform: translateY(-50%);
+  animation: Flow-move 10s linear infinite;
+  pointer-events: none;
+}
+
+/* =========================
+   FLOW GLOW MOTION
+========================= */
+@keyframes Flow-move {
+  0% {
+    transform: translateX(-35%) translateY(-50%);
+  }
+  100% {
+    transform: translateX(35%) translateY(-50%);
+  }
+}
+
+/* =========================
+   CARD REACTION TIMING
+========================= */
+.Flow-card[data-flow="1"] { animation-delay: 0s; }
+.Flow-card[data-flow="2"] { animation-delay: 2.5s; }
+.Flow-card[data-flow="3"] { animation-delay: 5s; }
+.Flow-card[data-flow="4"] { animation-delay: 7.5s; }
+
+/* =========================
+   CARD GLOW RESPONSE
+========================= */
+@keyframes Flow-react {
+  0% {
+    transform: translateY(0) translateZ(0);
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  /* FLOW TOUCHES CARD */
+  15% {
+    transform: translateY(-12px) translateZ(20px);
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.35),
+      0 0 22px rgba(0, 255, 255, 0.35);
+    border-color: rgba(0, 255, 255, 0.9); /* AQUA BORDER */
+  }
+
+  /* SETTLE BACK */
+  30% {
+    transform: translateY(0) translateZ(0);
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  100% {
+    transform: translateY(0) translateZ(0);
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+}
+
+/* =========================
+   MONEY FLOW CARD (CREDIT CARD)
+========================= */
+/* =========================
+   PULSE EFFECT
