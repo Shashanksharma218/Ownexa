@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../Styles/Admin/Review.css";
-
+import SortBar from "../../Components/Dashboard/Filter"; 
 const API = import.meta.env.VITE_API_BASE;
 
 export default function Review() {
@@ -40,8 +40,8 @@ export default function Review() {
     try {
       setActionLoadingId(propertyId);
 
-      const res = await fetch(`${API}/admin/warnproperty`, {
-        method: "POST",
+      const res = await fetch(`${API}/property/warn`, {
+        method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ propertyId, adminreview }),
@@ -70,8 +70,8 @@ export default function Review() {
     try {
       setActionLoadingId(propertyId);
 
-      const res = await fetch(`${API}/admin/freezeproperty`, {
-        method: "POST",
+      const res = await fetch(`${API}/property/freeze`, {
+        method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ propertyId, adminreview }),
@@ -111,7 +111,15 @@ export default function Review() {
   return (
    <div className="admin-freeze-page">
   <div className="admin-freeze-header">
-    <h2 className="admin-freeze-title">Verify Properties</h2>
+        <h2 className="admin-freeze-title">Verify Properties</h2>
+        
+         <SortBar
+                  options={[
+                    { key: "last_doc_uploaded_at", label: "Date" },
+                  ]}
+                  data={properties}
+                  onChange={setProperties}
+                />
   </div>
 
   {properties.length === 0 ? (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../Styles/Admin/AdminViewPage.css";
-
+import SortBar from "../../Components/Dashboard/Filter"; 
 const API = import.meta.env.VITE_API_BASE;
 
 export default function AdminViewPage() {
@@ -38,8 +38,16 @@ export default function AdminViewPage() {
 
   return (
     <div className="admin-pending-page">
-      <h2>Pending Property Requests</h2>
-
+       <div className="admin-freeze-header"> <h2>Pending Property Requests</h2>
+       <SortBar
+                        options={[
+                          { key: "created_at", label: "Date" },
+                        ]}
+                        data={properties}
+                        onChange={setProperties}
+                      />
+ </div>
+     
       {properties.length === 0 ? (
         <p className="empty-text">No pending requests</p>
       ) : (
