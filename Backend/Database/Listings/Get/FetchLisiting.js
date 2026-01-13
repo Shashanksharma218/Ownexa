@@ -75,6 +75,7 @@ const FindingSellerListing = async (userId, status) => {
       state,
       token_name) ,
       holdings (
+      id , 
       avg_price_inr )`)
     .eq("seller_id", userId).eq("status", status).order("updated_at", { ascending: true });
 

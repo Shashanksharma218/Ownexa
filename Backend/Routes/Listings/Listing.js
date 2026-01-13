@@ -1,8 +1,11 @@
 import express from "express";
 import { getAuthUser } from "../../Middleware/Middleware.js";
 import PostListing from "../../Database/Listings/Post/PostListings.js";
+
 import UpdateHolding from "../../Database/Investments/Post/UpdateHoldings.js";
 import { FindingBuyerListing, FindingSellerListing, FindListings, FindPropertyListing } from "../../Database/Listings/Get/FetchLisiting.js";
+import CancelListing from "../../Database/Listings/Delete/CancelListing.js";
+import Holdings from "../../Database/Investments/Post/Holdings.js";
 const router = express.Router();
 
 
@@ -92,6 +95,29 @@ router.get("/propertylisting", async (req, res) => {
   }
 
 })
+
+/* Cancel Listing */
+router.post("/cancellisting", async (req, res) => {
+  try {
+    const user = await getAuthUser(req);
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
+
+    const listingData = req.body;
+
+    const listing = await CancelListing(listingData.id, user, "CANCELLED");
+    await Holdings(listingData, user); 
+
+    return res.status(200).json({
+      message: "Listing successfully cancelled",
+      listing,
+    });
+  } catch (err) {
+    console.error("Listing Cancellation Failed:", err);
+    return res.status(400).json({
+      error: err.message || "Listing cancellation failed",
+    });
+  }
+});
 
 export default router;
 
