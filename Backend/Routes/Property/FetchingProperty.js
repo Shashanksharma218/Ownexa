@@ -66,10 +66,10 @@ router.get("/warnedproperties", async (req, res) => {
     const user = await getAuthUser(req);
     if (!user) return res.status(401).json({ error: "Unauthorized" });
     const role = await FindRole(user.id);
-    if (role !== "ADMIN") {
+    if (role !== "Admin") {
       return res.status(403).json({ error: "Forbidden" });
     }
-    const properties = await FindValidatedStaleProperties(2); // 2 days
+    const properties = await FindValidatedStaleProperties(2); 
     return res.status(200).json(properties);
   } catch (err) {
     console.error("Error fetching properties:", err);

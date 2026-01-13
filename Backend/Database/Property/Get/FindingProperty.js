@@ -43,15 +43,15 @@ const FindingProperties = async (userId) => {
 };
 
 
-const FindValidatedStaleProperties = async (days) => {
+const FindValidatedStaleProperties = async (days = 2) => {
   const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 
   const { data, error } = await supabase
     .from("properties")
     .select("*")
-    .eq("status", "VALIDATED")
-    .lt("last_doc_uploaded_at", cutoff)
-    .order("last_doc_uploaded_at", { ascending: true });
+    .eq("status", "Validated")
+    .or(`last_doc_uploaded_at.lt.${cutoff},last_doc_uploaded_at.is.null`)
+    .order("last_doc_uploaded_at", { ascending: true, nullsFirst: true });
 
   if (error) throw error;
   return data;

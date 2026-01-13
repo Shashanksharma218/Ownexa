@@ -17,6 +17,7 @@ import MarketLayout from "./Layouts/Market";
 import PropertiesPage from "./Pages/Profile/Properties";
 import Home from "./Components/Home";
 import AdminDashboardLayout from "./Layouts/AdminDashboard";
+import Review from "./Pages/Admin/Review";
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
          <Route index element={<h1>Hello this is Admin Dashboard</h1>} />
         <Route path="Pending" element={<AdminViewPage />} />
         <Route path="Pending/Property/:id" element={<AdminPropertyPage />} />
-        <Route path="Documents" element={<><h1>Hello this is Document</h1></>} />
+        <Route path="Documents" element={<Review/>} />
       </Route>
     </Routes>
   );
