@@ -105,7 +105,7 @@ router.post("/cancellisting", async (req, res) => {
     const listingData = req.body;
 
     const listing = await CancelListing(listingData.id, user, "CANCELLED");
-    await Holdings(listingData, user); 
+    await Holdings(listingData, user);
 
     return res.status(200).json({
       message: "Listing successfully cancelled",

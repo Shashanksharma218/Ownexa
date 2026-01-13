@@ -60,7 +60,7 @@ export default function ListingsPage() {
   const handleCancelListing = async (item) => {
     // item is your listing row from supabase
     const listingId = item.id;
-    const blockchainId = item.listing_blockchain_id 
+    const blockchainId = item.listing_blockchain_id
     const propertyId = item.properties?.id;
     const tokenQty = item.token_quantity;
     const pricePerTokenInr = item.price_per_token_inr;
