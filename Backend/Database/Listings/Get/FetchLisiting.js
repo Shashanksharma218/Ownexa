@@ -69,7 +69,9 @@ const FindingSellerListing = async (userId, status) => {
       price_per_token_inr ,
       created_at,
       status,
+      listing_blockchain_id ,
       properties (
+      id ,
       title ,
       city,
       state,

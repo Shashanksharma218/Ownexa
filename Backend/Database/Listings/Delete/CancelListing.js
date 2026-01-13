@@ -8,7 +8,8 @@ const CancelListing = async (listingId, user, status) => {
     .from("listings")
     .update({
       status: status,
-      updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      
     })
     .eq("id", listingId)
     .select()
