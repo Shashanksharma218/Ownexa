@@ -44,7 +44,8 @@ const AddProperty = async (data, user, files) => {
       legal_documents: legalDocumentUrls || [],
 
       status: "pending",
-      blockchain_id: null
+      blockchain_id: null,
+      last_doc_uploaded_at: new Date().toISOString()
     })
     .select()
     .single();

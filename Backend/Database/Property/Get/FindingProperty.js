@@ -41,4 +41,19 @@ const FindingProperties = async (userId) => {
   if (error) throw error;
   return data;
 };
-export { FindProperty, FindOneProperty, FindingProperties };
+
+
+const FindValidatedStaleProperties = async (days) => {
+  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq("status", "VALIDATED")
+    .lt("last_doc_uploaded_at", cutoff)
+    .order("last_doc_uploaded_at", { ascending: true });
+
+  if (error) throw error;
+  return data;
+};
+export { FindProperty, FindOneProperty, FindingProperties  , FindValidatedStaleProperties };

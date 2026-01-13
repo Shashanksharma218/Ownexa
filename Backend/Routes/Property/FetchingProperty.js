@@ -1,6 +1,6 @@
 import express from "express";
-import { FindProperty, FindOneProperty, FindingProperties } from "../../Database/Property/Get/FindingProperty.js";
-import { getAuthUser } from "../../Middleware/Middleware.js";
+import { FindProperty, FindOneProperty, FindingProperties, FindValidatedStaleProperties } from "../../Database/Property/Get/FindingProperty.js";
+import { FindRole, getAuthUser } from "../../Middleware/Middleware.js";
 
 const router = express.Router();
 
@@ -58,10 +58,25 @@ router.get("/userproperties", async (req, res) => {
     console.error("Error fetching properties:", err.message);
     return res.status(400).json({ error: err.message });
   }
-});
+}); 
 
 
-
+router.get("/warnedproperties", async (req, res) => {
+  try {
+    const user = await getAuthUser(req);
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
+    const role = await FindRole(user.id);
+    if (role !== "ADMIN") {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    const properties = await FindValidatedStaleProperties(2); // 2 days
+    return res.status(200).json(properties);
+  } catch (err) {
+    console.error("Error fetching properties:", err);
+    return res.status(400).json({ error: err.message || "Failed to fetch properties" });
+  }
+}); 
+ 
 
 
 export default router;
