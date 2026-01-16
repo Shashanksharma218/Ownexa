@@ -19,6 +19,7 @@ import PropertiesPage from "./Pages/Profile/Properties";
 import Home from "./Components/Home";
 import AdminDashboardLayout from "./Layouts/AdminDashboard";
 import Review from "./Pages/Admin/Review";
+import NotFound from "./Components/Extra/NotFound";
 
 /** Forces scroll to top on refresh + route changes */
 function ScrollManager() {
@@ -69,6 +70,8 @@ function App() {
           <Route path="Pending/Property/:id" element={<AdminPropertyPage />} />
           <Route path="Documents" element={<Review />} />
         </Route>
+
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </>
   );
