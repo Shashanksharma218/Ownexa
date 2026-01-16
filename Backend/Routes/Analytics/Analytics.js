@@ -1,5 +1,7 @@
 import express from "express";
-import Analytics from "../../Database/Analytics/Analytics.js";
+import  {Analytics, AdminAnalytics } from "../../Database/Analytics/Analytics.js";
+import { FindRole, getAuthUser } from "../../Middleware/Middleware.js";
+
 const router = express.Router();  
 
 router.get("/public/stats", async (req, res) => {
@@ -18,5 +20,27 @@ router.get("/public/stats", async (req, res) => {
     });
   }
 });
+
+router.get("/admin/stats", async (req, res) => {
+  try {
+    const user = await getAuthUser(req);
+    const role = await FindRole(user.id);
+    if (role != "Admin") {
+       return res.status(403).json({
+        error: "Forbidden"
+      });
+    }
+    const stats = await AdminAnalytics(); 
+    return res.status(200).json({
+      stats 
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      error: "Unable to fetch stats"
+    });
+  }
+});
+
 
 export default router; 
