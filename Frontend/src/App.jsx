@@ -7,7 +7,7 @@ import AdminViewPage from "./Pages/Admin/AdminViewPage";
 import AdminPropertyPage from "./Pages/Admin/AdminPropertyPage";
 import PrimaryMarket from "./Pages/Market/Primary";
 import PropertyCard from "./Pages/Market/PropertyCard";
-import PageFade from "./Components/Loaders/PageFade";
+
 import DashboardLayout from "./Layouts/Dashboard";
 import ProfilePage from "./Pages/Profile/ProfilePage";
 import TransactionsPage from "./Pages/Profile/Transaction";
@@ -49,9 +49,9 @@ function App() {
 
         <Route path="/" element={<MarketLayout />}>
           <Route index element={<Home />} />
-          <Route path="/PrimaryMarket" element={<PageFade><PrimaryMarket /></PageFade>} />
-          <Route path="/SecondaryMarket" element={<PageFade><SecondaryMarket /></PageFade>} />
-          <Route path="/Property/:id" element={<PageFade><PropertyCard /></PageFade>} />
+          <Route path="/PrimaryMarket" element={<PrimaryMarket />} />
+          <Route path="/SecondaryMarket" element={<SecondaryMarket />} />
+          <Route path="/Property/:id" element={<PropertyCard />} />
         </Route>
 
         <Route path="/Dashboard" element={<DashboardLayout />}>
