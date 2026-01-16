@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import PropertyTokenABI from "../../abi/PropertyToken.json";
 import "../../Styles/Market/PropertyCard.css";
 import TxLoader from "../../Components/Loaders/TxLoader";
+import MarketLoader from "../../Components/Loaders/MarketLoader";
 const API = import.meta.env.VITE_API_BASE;
 const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
 
@@ -221,7 +222,7 @@ setTimeout(() => setTxOpen(false), 400);
     }
   };
 
-  if (loading) return <div className="page-loading">Loading property...</div>;
+  if (loading) return <MarketLoader label="Fetching The Token ....... " />
   if (!property) return null;
 
   return (

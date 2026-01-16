@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../Styles/Profile/ProfilePage.css"
 import { useNavigate } from "react-router";
+import DashboardPageLoader from "../../Components/Loaders/DashboardLoader";
 const API = import.meta.env.VITE_API_BASE;
 
 function formatTimeAgo(date) {
@@ -113,7 +114,7 @@ export default function ProfilePage() {
         return () => clearInterval(interval);
     }, [user?.created_at]);
 
-    if (loading) return <div className="loading-screen">Loading profile…</div>;
+    if (loading) return <DashboardPageLoader title="Fetching Your Details ....... " />;
 
     if (!user) return <div className="loading-screen">Unauthorized</div>;
 
