@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../Styles/Market/Secondary.css";
 
+import { Building, Gem, Wallet, ArrowRight } from "lucide-react";
+
 const API = import.meta.env.VITE_API_BASE;
 
 export default function SecondaryMarket() {
@@ -12,10 +14,9 @@ export default function SecondaryMarket() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const res = await fetch(
-          `${API}/propertylisting?status=ACTIVE`,
-          { credentials: "include" }
-        );
+        const res = await fetch(`${API}/propertylisting?status=ACTIVE`, {
+          credentials: "include",
+        });
 
         if (!res.ok) throw new Error("Failed to fetch listings");
 
@@ -35,50 +36,47 @@ export default function SecondaryMarket() {
     fetchListings();
   }, []);
 
-  if (loading) {
-    return <div className="sm-loading">Loading secondary market…</div>;
-  }
-
   return (
     <section className="sm-page">
-      {listings.length === 0 ? (
-        <div className="sm-empty">
-          No active secondary listings
+      {/* SAME LOADER */}
+      {loading && (
+        <div className="pm-loaderOverlay">
+          <div className="pm-loaderCard">
+            <div className="pm-iconRow">
+              <Building size={18} />
+              <ArrowRight size={18} className="pm-arrow" />
+              <Gem size={18} />
+              <ArrowRight size={18} className="pm-arrow" />
+              <Wallet size={18} />
+            </div>
+            <div className="pm-loaderText">Fetching market…</div>
+          </div>
         </div>
+      )}
+
+      {!loading && listings.length === 0 ? (
+        <div className="sm-empty">No active secondary listings</div>
       ) : (
-        <div className="sm-grid">
+        <div className={`sm-grid ${loading ? "pm-blurWhileLoading" : ""}`}>
           {listings.map((item) => (
             <article
               key={item.id}
               className="sm-card"
-              onClick={() =>
-                navigate(`/Property/${item.properties.id}`)
-              }
+              onClick={() => navigate(`/Property/${item.properties.id}`)}
             >
-              {/* Thumbnail */}
               <div className="sm-thumb">
                 <img
-                  src={
-                    item.properties.property_images?.[0] ||
-                    "/placeholder-property.jpg"
-                  }
+                  src={item.properties.property_images?.[0] || "/placeholder-property.jpg"}
                   alt={item.properties.title}
                 />
               </div>
 
-              {/* Content */}
               <div className="sm-info">
-                {/* Header */}
                 <div className="sm-header">
-                  <h4 className="sm-title">
-                    {item.properties.title}
-                  </h4>
-                  <span className="sm-badge sm-active">
-                    ACTIVE
-                  </span>
+                  <h4 className="sm-title">{item.properties.title}</h4>
+                  <span className="sm-badge sm-active">ACTIVE</span>
                 </div>
 
-                {/* Meta */}
                 <div className="sm-meta">
                   <div className="sm-row">
                     <span>Token</span>
@@ -96,7 +94,6 @@ export default function SecondaryMarket() {
                   </div>
                 </div>
 
-                {/* Footer */}
                 <div className="sm-footer">
                   <span className="sm-date">
                     {new Date(item.created_at).toLocaleDateString()}

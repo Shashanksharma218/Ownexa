@@ -3,6 +3,7 @@
 ========================= */
 
 .sm-page {
+  position: relative;
   min-height: 100vh;
   padding: 24px;
   background-color: #0b0d12;
