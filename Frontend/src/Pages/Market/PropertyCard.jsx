@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 import PropertyTokenABI from "../../abi/PropertyToken.json";
 import "../../Styles/Market/PropertyCard.css";
-
+import TxLoader from "../../Components/Loaders/TxLoader";
 const API = import.meta.env.VITE_API_BASE;
 const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
 
@@ -29,6 +29,12 @@ export default function PropertyCard() {
   const [secondaryBuying, setSecondaryBuying] = useState(false);
   const [quantity, setQuantity] = useState("");
   const [listings, setListings] = useState(null);
+
+const [txOpen, setTxOpen] = useState(false);
+const [txTitle, setTxTitle] = useState("");
+const [txSub, setTxSub] = useState("");
+const [txHash, setTxHash] = useState("");
+const [txDir, setTxDir] = useState("ESTATE_TO_ETH");
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -87,9 +93,16 @@ export default function PropertyCard() {
         property.blockchain_id,
         BigInt(quantity),
         { value }
-      );
+      ); 
+
+      setTxDir("ESTATE_TO_ETH");
+setTxTitle("Transaction in Progress");
+setTxSub("Waiting for on-chain confirmation…");
+setTxHash(tx.hash);
+setTxOpen(true);
 
       const receipt = await tx.wait();
+      setTxSub("Confirmation Syncing with server…");
       const res = await fetch(`${API}/transaction?type=primary`, {
         method: "POST",
         credentials: "include",
@@ -111,10 +124,14 @@ export default function PropertyCard() {
         throw new Error(err.error || "Transaction sync failed");
       }
 
-      alert("Tokens bought successfully!");
+     setTxSub("Tokens Bought Successfully");
+setTimeout(() => setTxOpen(false), 400);
+
       setQuantity("");
 
     } catch (err) {
+      setTxOpen(false);
+    setTxHash("Transaction Failed");
       console.error(err);
       alert(err.message || "Primary buy failed");
     } finally {
@@ -158,7 +175,14 @@ export default function PropertyCard() {
         { value: totalPriceWei }
       );
 
+      setTxDir("ESTATE_TO_ETH");
+setTxTitle("Transaction in Progress");
+setTxSub("Waiting for on-chain confirmation…");
+setTxHash(tx.hash);
+setTxOpen(true);
+
       const receipt = await tx.wait();
+      setTxSub("Confirmation Syncing with server…");
 
       const res = await fetch(`${API}/transaction?type=secondary`, {
         method: "POST",
@@ -177,14 +201,19 @@ export default function PropertyCard() {
         }),
       });
 
+
+
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.error || "Transaction sync failed");
       }
 
-      alert("Secondary tokens bought successfully!");
+       setTxSub("Tokens Bought Successfully");
+setTimeout(() => setTxOpen(false), 400);
 
     } catch (err) {
+       setTxOpen(false);
+    setTxHash("Transaction Failed");
       console.error(err);
       alert(err.message || "Secondary buy failed");
     } finally {
@@ -197,6 +226,14 @@ export default function PropertyCard() {
 
   return (
     <div className="property-buy-page">
+      <TxLoader
+  open={txOpen}
+  direction={txDir}
+  title={txTitle}
+  subtitle={txSub}
+  txHash={txHash}
+  onClose={() => {}} // keep disabled while processing
+/>
       <div className="property-buy-container">
 
         {/* LEFT COLUMN */}
