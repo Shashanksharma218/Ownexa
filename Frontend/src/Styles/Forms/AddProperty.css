@@ -8,7 +8,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 28px;
 
-  background: #121214;
+  
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
   color: #e5e7eb;
 }
@@ -18,7 +18,7 @@
 ================================ */
 .form-panel,
 .preview-panel {
-  background: #1C1C1E;
+  background: #0b0d12;
   backdrop-filter: blur(16px);
   border-radius: 22px;
   padding: 28px;

@@ -1,6 +1,8 @@
 import supabase from "../../SupabaseClient.js";
 import { upload } from "../../../Middleware/Middleware.js";
 import { uploadFiles } from "./UploadFiles.js";
+
+
 const AddProperty = async (data, user, files) => {
   console.log(user);
   console.log(data); 

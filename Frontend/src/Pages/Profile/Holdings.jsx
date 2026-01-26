@@ -6,6 +6,7 @@ import "../../Styles/Profile/Holdings.css";
 import SortBar from "../../Components/Dashboard/Filter";
 
 import PropertyTokenABI from "../../abi/PropertyToken.json"
+import ReactorOrbitLoader from "../../Components/Loaders/ProfileLoader";
 const ETH_INR = 300000;
 const API = import.meta.env.VITE_API_BASE;
 const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
@@ -138,7 +139,7 @@ export default function HoldingsPage() {
   };
 
   if (loading) {
-    return <div className="txn-loading">Loading Holdings…</div>;
+    return <ReactorOrbitLoader label="Fetching your Holdings data..." />
   }
 
   return (

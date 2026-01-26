@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import "../../Styles/Profile/Listing.css";
 
 import PropertyTokenABI from "../../abi/PropertyToken.json";
+import ReactorOrbitLoader from "../../Components/Loaders/ProfileLoader";
 
 const API = import.meta.env.VITE_API_BASE;
 const CONTRACT_ADDRESS = import.meta.env.VITE_SMART_CONTRACT;
@@ -109,7 +110,7 @@ export default function ListingsPage() {
   };
 
   if (loading) {
-    return <div className="listings-loading">Loading listings…</div>;
+    return <ReactorOrbitLoader label="Fetching your Listings" />
   }
 
   return (

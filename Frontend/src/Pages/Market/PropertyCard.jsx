@@ -97,10 +97,10 @@ const [txDir, setTxDir] = useState("ESTATE_TO_ETH");
       ); 
 
       setTxDir("ESTATE_TO_ETH");
-setTxTitle("Transaction in Progress");
-setTxSub("Waiting for on-chain confirmation…");
-setTxHash(tx.hash);
-setTxOpen(true);
+      setTxTitle("Transaction in Progress");
+      setTxSub("Waiting for on-chain confirmation…");
+      setTxHash(tx.hash);
+      setTxOpen(true);
 
       const receipt = await tx.wait();
       setTxSub("Confirmation Syncing with server…");
@@ -119,14 +119,14 @@ setTxOpen(true);
           status: "SUCCESS",
         })
       });
-
+      
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.error || "Transaction sync failed");
       }
 
      setTxSub("Tokens Bought Successfully");
-setTimeout(() => setTxOpen(false), 400);
+     setTimeout(() => setTxOpen(false), 400);
 
       setQuantity("");
 

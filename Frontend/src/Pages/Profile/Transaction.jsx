@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../Styles/Profile/Transactions.css";
 import SortBar from "../../Components/Dashboard/Filter";
+import ReactorOrbitLoader from "../../Components/Loaders/ProfileLoader";
 const API = import.meta.env.VITE_API_BASE;
 
 export default function TransactionsPage() {
@@ -28,7 +29,7 @@ export default function TransactionsPage() {
   }, []);
 
   if (loading) {
-    return <div className="txn-loading">Loading transactions…</div>;
+    return  <ReactorOrbitLoader label="Fetching your Transactions" />
   }
 
   return (

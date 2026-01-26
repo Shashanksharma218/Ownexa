@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "../../Styles/Profile/Transactions.css";
 import "../../Styles/Profile/Holdings.css";
 import SortBar from "../../Components/Dashboard/Filter";
+import ReactorOrbitLoader from "../../Components/Loaders/ProfileLoader";
 const API = import.meta.env.VITE_API_BASE;
 
 
@@ -31,7 +32,7 @@ export default function PropertiesPage() {
   }, []);
 
   if (loading) {
-    return <div className="txn-loading">Loading Properties…</div>;
+    return <ReactorOrbitLoader label="Fetching your Properties" />
   }
 
   return (
