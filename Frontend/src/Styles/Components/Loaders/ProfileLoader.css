@@ -189,3 +189,67 @@
 @media (max-width: 420px){
   .rol-core{ width: 132px; height: 132px; }
 }
+
+/* DARK THEME LOADER (only loader visuals, no page background change) */
+
+.rol-core{
+  background: rgba(10, 14, 20, 0.62);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 22px 70px rgba(0,0,0,0.65),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  backdrop-filter: blur(14px);
+}
+
+/* darker reactor glow */
+.rol-core::before{
+  background:
+    radial-gradient(circle, rgba(59,130,246,0.42), transparent 56%),
+    radial-gradient(circle, rgba(0,255,255,0.10), transparent 62%);
+  filter: blur(14px);
+}
+
+/* inner ring */
+.rol-core::after{
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 0 24px rgba(59,130,246,0.12);
+}
+
+/* rings: cooler + darker */
+.rol-ring{
+  border: 1px solid rgba(147,197,253,0.22);
+  box-shadow: 0 0 22px rgba(59,130,246,0.16);
+  opacity: 0.92;
+}
+
+/* satellite dot */
+.rol-ring::after{
+  background: rgba(210,245,255,0.9);
+  box-shadow:
+    0 0 18px rgba(59,130,246,0.55),
+    0 0 30px rgba(0,255,255,0.18);
+}
+
+/* ETH diamond: slightly muted for dark */
+.rol-eth{
+  filter: drop-shadow(0 0 18px rgba(59,130,246,0.55));
+}
+
+.rol-eth-top{
+  border-bottom: 24px solid rgba(235,245,255,0.92);
+}
+.rol-eth-bottom{
+  border-top: 24px solid rgba(96,165,250,0.82);
+}
+
+/* candles: dark-friendly */
+.rol-candle{
+  background: rgba(235,245,255,0.78);
+  box-shadow: 0 0 14px rgba(59,130,246,0.22);
+}
+
+/* text for dark theme */
+.rol-text{
+  color: rgba(235,245,255,0.88);
+  opacity: 0.92;
+}
