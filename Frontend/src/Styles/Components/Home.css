@@ -772,3 +772,218 @@
     opacity: 1 !important;
   }
 }
+
+
+/* =========================
+   MOBILE RESPONSIVE FIX PACK
+   (paste at the END)
+========================= */
+
+html, body { overflow-x: hidden; }
+* { box-sizing: border-box; }
+
+.Home,
+.Flow,
+.Lifecycle { width: 100%; overflow-x: hidden; }
+
+/* ---------- HERO / PANELS ---------- */
+@media (max-width: 768px) {
+  .Home-panels{
+    min-height: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;              /* was huge */
+    padding: 110px 16px 70px;
+  }
+
+  .Home-panel{
+    width: min(92vw, 420px);
+    height: auto;
+    padding: 18px 18px;
+    border-radius: 22px;
+  }
+
+  /* remove hard tilts on mobile */
+  .Home-panelLeft,
+  .Home-panelRight{
+    transform: none !important;
+  }
+
+  /* disable crazy hover jumps on touch devices */
+  .Home-panel.Home-panelLeft:hover,
+  .Home-panel.Home-panelRight:hover{
+    transform: none !important;
+  }
+
+  .Home-amount{
+    font-size: 1.4rem;
+    letter-spacing: 0.10em;
+  }
+
+  .Home-bgText{
+    top: 18px;
+    font-size: clamp(2.2rem, 14vw, 4.2rem);
+    line-height: 0.92;
+    opacity: 0.10;
+  }
+}
+
+/* ---------- FLOW SECTION ---------- */
+@media (max-width: 768px) {
+  .Flow{
+    padding: 70px 16px 90px;
+    gap: 44px;
+  }
+
+  .Flow-title{
+    font-size: 22px;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+  }
+
+  .Flow-cards{
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .Flow-card,
+  .Flow-cardMoney{
+    width: min(92vw, 360px);
+    height: auto;
+  }
+
+  .Flow-card{
+    min-height: 110px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .Flow-cardMoney{
+    min-height: 140px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .Flow-glow{
+    left: -70%;
+    width: 240%;
+    height: 70px;
+    filter: blur(45px);
+  }
+
+  .Flow-cardNumber{
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+    word-break: break-word;
+  }
+}
+
+/* ---------- LIFECYCLE SECTION ---------- */
+@media (max-width: 900px) {
+  .Lifecycle{
+    grid-template-columns: 1fr;
+    padding: 80px 16px 90px;
+    gap: 42px;
+  }
+
+  .Lifecycle-left{
+    min-height: 520px;      /* ensures curve + pills fit */
+  }
+
+  .Lifecycle-principle{
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0 0 18px;
+    text-align: center;
+  }
+
+  .span1{
+    font-size: 1.15rem;
+    letter-spacing: 0.16em;
+  }
+
+  .span2{
+    font-size: clamp(2.3rem, 12vw, 3.6rem);
+    letter-spacing: 0.06em;
+  }
+
+  .Lifecycle-curve,
+  .Lifecycle-states{
+    top: 90px;
+    height: 360px;          /* fixed height so it doesn't overflow */
+  }
+
+  /* Make pills centered and stacked cleanly */
+  .Lifecycle-state{
+    left: 50% !important;
+    transform: translateX(-50%);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    padding: 10px 16px;
+    opacity: 0.9;           /* readability on mobile */
+  }
+
+  .Lifecycle-state[data-step="1"]{ top: 12%; }
+  .Lifecycle-state[data-step="2"]{ top: 32%; }
+  .Lifecycle-state[data-step="3"]{ top: 52%; }
+  .Lifecycle-state[data-step="4"]{ top: 72%; }
+
+  .Lifecycle-right{
+    margin-left: 0;
+    max-width: 100%;
+    text-align: center;
+    transform: none;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    letter-spacing: 0.10em;
+  }
+
+  .Lifecycle-emphasis{
+    font-size: 1.25rem;
+    letter-spacing: 0.12em;
+    white-space: normal;    /* avoid horizontal overflow */
+  }
+
+  .Lifecycle-emphasis::after{
+    width: 180px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* ---------- EXTRA SMALL PHONES ---------- */
+@media (max-width: 420px) {
+  .Home-panels{ padding-top: 96px; gap: 22px; }
+  .Home-panel{ padding: 16px; border-radius: 20px; }
+  .Home-footer{ font-size: 0.6rem; }
+
+  .Flow{ padding: 60px 14px 80px; }
+  .Flow-title{ font-size: 20px; }
+
+  .Lifecycle-curve,
+  .Lifecycle-states{
+    height: 320px;
+  }
+
+  .Lifecycle-state{
+    width: 92%;
+    text-align: center;
+  }
+}
+
+/* ---------- TOUCH DEVICES: disable hover tilt globally ---------- */
+@media (hover: none) and (pointer: coarse) {
+  .Home-panel:hover{
+    transform: none !important;
+  }
+}
+
+/* Hide background text on phones */
+@media (max-width: 600px) {
+  .Home-bgText {
+    display: none !important;
+  }
+}
