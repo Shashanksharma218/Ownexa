@@ -1,13 +1,11 @@
 import express from "express";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import CreateUser from "../../Database/Users/CreateUser.js";
 import LoginUser from "../../Database/Users/LoginUser.js";
 import supabase from "../../Database/SupabaseClient.js";
-import { FindUser  } from "../../Database/Users/FindUser.js";
-import { getAuthUser  } from "../../Middleware/Middleware.js";
+import { FindUser } from "../../Database/Users/FindUser.js";
+import { getAuthUser } from "../../Middleware/Middleware.js";
 
-dotenv.config();
 const router = express.Router();
 router.use(cookieParser());
 
@@ -97,9 +95,9 @@ router.post("/auth/login", async (req, res) => {
     if (!Email || !Password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    
+
     const { session } = await LoginUser({ Email, Password });
-    
+
     // Set access token cookie (Supabase manages the session)
     res.cookie("sb-access-token", session.access_token, {
       httpOnly: true,
@@ -107,7 +105,7 @@ router.post("/auth/login", async (req, res) => {
       sameSite: "lax",
       path: "/"
     });
-    
+
     return res.status(200).json({
       message: "Login successful"
     });
@@ -128,7 +126,7 @@ router.get("/auth/logout", async (req, res) => {
     sameSite: "lax",
     path: "/"
   });
-  
+
   return res.status(200).json({
     message: "Logout successful"
   });
@@ -139,7 +137,7 @@ router.get("/auth/logout", async (req, res) => {
 router.get("/auth/me", async (req, res) => {
   try {
     const authUser = await getAuthUser(req);
-    const user = await FindUser(authUser.id); 
+    const user = await FindUser(authUser.id);
     return res.status(200).json({
       loggedIn: true,
       user
