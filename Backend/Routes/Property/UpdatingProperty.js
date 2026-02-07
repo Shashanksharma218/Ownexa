@@ -108,9 +108,6 @@ router.put("/property/freeze", async (req, res) => {
 });
 
 
-
-
-
 router.put("/property/sold", async (req, res) => {
   try {
     const user = await getAuthUser(req); 

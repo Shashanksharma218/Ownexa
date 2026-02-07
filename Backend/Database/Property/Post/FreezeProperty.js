@@ -34,7 +34,7 @@ const FreezeProperty = async (propertyId) => {
 
   const { data: updatedRows1, error: updateError1 } = await supabase
     .from("holdings")
-    .update({ is_listed: false })
+    .update({ holding_status: false })
     .eq("property_id", propertyId)
     .select();
 
