@@ -19,6 +19,9 @@ export default function HoldingsPage() {
   const [listQty, setListQty] = useState("");
   const [listPrice, setListPrice] = useState("");
   const [listingLoading, setListingLoading] = useState(false);
+  const [showRedeemModal, setShowRedeemModal] = useState(false);
+  const [redeemLoading, setRedeemLoading] = useState(false);
+  const [selectedRedeemHolding, setSelectedRedeemHolding] = useState(null);
 
   useEffect(() => {
     const fetchHoldings = async () => {
@@ -28,6 +31,7 @@ export default function HoldingsPage() {
         });
         if (!res.ok) throw new Error("Failed to fetch holdings");
         const data = await res.json();
+        console.log(data); 
         setHoldings(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error(err);
@@ -66,6 +70,68 @@ export default function HoldingsPage() {
     setShowModal(false);
     setSelectedHolding(null);
   };
+
+  const openRedeemModal = (holding) => {
+    setSelectedRedeemHolding(holding);
+    setShowRedeemModal(true);
+  };
+
+  const closeRedeemModal = () => {
+    setShowRedeemModal(false);
+    setSelectedRedeemHolding(null);
+  };
+
+  const handleRedeemTokens = async () => {
+    if (!selectedRedeemHolding) return;
+
+    try {
+      setRedeemLoading(true);
+
+      const contract = await getContract();
+
+      // Call redeem on-chain
+      const tx = await contract.redeemTokens(
+        selectedRedeemHolding.properties.blockchain_id
+      );
+
+      const receipt = await tx.wait();
+
+      // Sync backend
+      const res = await fetch(`${API}/holding/freeze`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          holdingId: selectedRedeemHolding.id,
+        }),
+      });
+
+      if (!res.ok) {
+        const t = await res.text().catch(() => "");
+        throw new Error(t || "Backend redeem sync failed");
+      }
+
+      // Update UI (mark redeemed + move to previous)
+      setHoldings((prev) =>
+        prev.map((h) =>
+          h.id === selectedRedeemHolding.id
+            ? { ...h, redeemed: true }
+            : h
+        )
+      );
+
+      alert("Tokens redeemed successfully");
+
+      closeRedeemModal();
+
+    } catch (err) {
+      console.error("Redeem failed:", err);
+      alert(err.message || "Redeem failed");
+    } finally {
+      setRedeemLoading(false);
+    }
+  };
+
   const handleListTokens = async () => {
     if (!selectedHolding) return;
 
@@ -158,11 +224,12 @@ export default function HoldingsPage() {
         />
       </div>
 
-      {holdings.length === 0 ? (
+      {/* ACTIVE HOLDINGS (NOT REDEEMED) */}
+      {holdings.filter((h) => h.redeemed == false).length === 0 ? (
         <p className="txn-empty">No Current Holdings</p>
       ) : (
         <div className="txn-grid">
-          {holdings.map((h) => {
+          {holdings.filter((h) => h.redeemed == false).map((h) => {
             const totalInvestment =
               h.token_quantity * h.avg_price_inr;
 
@@ -217,18 +284,91 @@ export default function HoldingsPage() {
                       ₹{totalInvestment.toLocaleString()}
                     </span>
 
-                    <button
-                      className="list-btn"
-                      onClick={() => openModal(h)}
-                    >
-                      List Tokens
-                    </button>
+                    {h.holding_status === true && (
+                      <button
+                        className="list-btn"
+                        onClick={() => openModal(h)}
+                      >
+                        List Tokens
+                      </button>
+                    )}
+
+                    {h.holding_status === false && (
+                      <button
+                        className="list-btn redeem-btn"
+                        onClick={() => openRedeemModal(h)}
+                      >
+                        Redeem
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
             );
           })}
         </div>
+      )}
+      {/* ===============================
+          PREVIOUS HOLDINGS (REDEEMED)
+      =============================== */}
+      {holdings.filter((h) => h.redeemed === true).length > 0 && (
+        <>
+          <h2 className="txn-subtitle">Your Previous Holdings</h2>
+
+          <div className="txn-grid previous-properties">
+            {holdings.filter((h) => h.redeemed === true).map((h) => {
+
+              const totalInvestment =
+                h.token_quantity * h.avg_price_inr;
+
+              const image =
+                h.properties?.property_images?.[0] ||
+                "/placeholder-property.jpg";
+
+              return (
+                <div key={h.id} className="holding-card previous-card">
+
+                  <div className="holding-image">
+                    <img src={image} alt={h.properties.title} />
+                    <span className="holding-status SOLD">REDEEMED</span>
+                  </div>
+
+                  <div className="holding-body">
+
+                    <div className="holding-header">
+                      <h3 className="holding-title">
+                        {h.properties.title}
+                      </h3>
+
+                      <span className="holding-location">
+                        {h.properties.city}, {h.properties.state}
+                      </span>
+                    </div>
+
+                    <div className="holding-meta">
+
+                      <div>
+                        <span className="meta-label">Token</span>
+                        <span className="meta-value">
+                          {h.properties.token_name}
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="meta-label">Total Investment</span>
+                        <span className="meta-value">
+                          ₹{totalInvestment.toLocaleString()}
+                        </span>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
       {showModal && selectedHolding && (
         <div className="modal-backdrop">
@@ -267,6 +407,39 @@ export default function HoldingsPage() {
                 {listingLoading ? "Listing..." : "Confirm Listing"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* ===============================
+          REDEEM MODAL
+      =============================== */}
+      {showRedeemModal && selectedRedeemHolding && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+
+            <h2>Confirm Redeem</h2>
+
+            <p className="modal-sub">
+              {selectedRedeemHolding.properties.token_name}
+            </p>
+
+            <p style={{ marginBottom: "12px", fontSize: "14px" }}>
+              Are you sure you want to redeem your tokens and claim settlement?
+            </p>
+
+            <div className="modal-actions">
+              <button onClick={closeRedeemModal}>
+                Cancel
+              </button>
+
+              <button
+                disabled={redeemLoading}
+                onClick={handleRedeemTokens}
+              >
+                {redeemLoading ? "Redeeming..." : "Confirm Redeem"}
+              </button>
+            </div>
+
           </div>
         </div>
       )}

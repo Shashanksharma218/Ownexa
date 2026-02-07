@@ -79,7 +79,7 @@ export default function PropertiesPage() {
     setTxLoading(propertyId);
 
     // Fixed ETH Rate
-    const rate = 30000; // 1 ETH = ₹3000
+    const rate = 300000;
 
     const ethAmount = (sellPrice / rate).toFixed(6);
 
