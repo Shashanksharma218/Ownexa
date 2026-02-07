@@ -100,7 +100,7 @@ export default function HoldingsPage() {
         selectedRedeemHolding.properties.blockchain_id
       );
 
-      const receipt = await tx.wait();
+       await tx.wait();
 
       // Sync backend
       const res = await fetch(`${API}/holding/freeze`, {

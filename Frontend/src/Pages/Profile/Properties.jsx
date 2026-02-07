@@ -94,7 +94,7 @@ export default function PropertiesPage() {
       value: ethers.parseEther(ethAmount),
     });
 
-    const receipt = await tx.wait();
+    await tx.wait();
 
     // 2) Sync backend
     const res = await fetch(`${API}/property/sold`, {
