@@ -6,6 +6,7 @@ const CreateUser = async ({ Email, Password, Username, Role, Avatar }) => {
     password: Password
   });
   if (error) throw error;
+
   const { data: user, error: dbError } = await supabase
     .from("users")
     .insert({
@@ -17,7 +18,9 @@ const CreateUser = async ({ Email, Password, Username, Role, Avatar }) => {
     })
     .select()
     .single();
+
   if (dbError) throw dbError;
+
   return user;
 };
 
