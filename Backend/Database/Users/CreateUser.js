@@ -1,12 +1,12 @@
 import supabase from "../SupabaseClient.js";
 
-const CreateUser = async ({ Email, Password, Username, Role, Avatar , Age , AnnualIncome , InvestmentAmount, Duration }) => {
+const CreateUser = async ({ Email, Password, Username, Role, Avatar , Age , income , InvestmentAmount, Duration }) => {
   const { data, error } = await supabase.auth.signUp({
     email: Email,
     password: Password
   });
   if (error) throw error;
-
+  console.log(income); 
   const { data: user, error: dbError } = await supabase
     .from("users")
     .insert({
@@ -16,7 +16,7 @@ const CreateUser = async ({ Email, Password, Username, Role, Avatar , Age , Annu
       avatar: Avatar,
       role: Role || "User", 
       age: Age, 
-      annual_income: AnnualIncome, 
+      income: income, 
       investment_amount: InvestmentAmount, 
       investment_duration : Duration 
     })
