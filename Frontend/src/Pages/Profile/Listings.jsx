@@ -166,6 +166,9 @@ export default function ListingsPage() {
         )}
       </section>
 
+      {/* Divider */}
+      <div className="listings-divider"></div>
+
       <section className="listings-section">
         <h2 className="listings-title">Sold Listings</h2>
 

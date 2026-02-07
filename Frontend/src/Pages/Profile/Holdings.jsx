@@ -242,7 +242,7 @@ export default function HoldingsPage() {
       {holdings.filter((h) => h.redeemed == false).length === 0 ? (
         <p className="txn-empty">No Current Holdings</p>
       ) : (
-        <div className="txn-grid">
+        <div className="holdings-grid">
           {holdings.filter((h) => h.redeemed == false).map((h) => {
             const totalInvestment =
               h.token_quantity * h.avg_price_inr;
@@ -329,7 +329,7 @@ export default function HoldingsPage() {
         <>
           <h2 className="txn-subtitle">Your Previous Holdings</h2>
 
-          <div className="txn-grid previous-properties">
+          <div className="holdings-grid previous-properties">
             {holdings.filter((h) => h.redeemed === true).map((h) => {
 
               const totalInvestment =
