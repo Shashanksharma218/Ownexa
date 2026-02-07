@@ -11,24 +11,24 @@ dotenv.config();
 const router = express.Router();
 router.use(cookieParser());
 
-/* User SignUp */
+/* User SignUp - Does NOT set cookies or log in */
 router.post("/auth/signup", async (req, res) => {
   try {
     const { Email, Password, Username, Avatar } = req.body;
     if (!Email || !Password || !Username || !Avatar) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const newUser = {
+    
+    await CreateUser({
       Email,
       Password,
       Username,
       Avatar,
       Role: "User"
-    };
-    const user = await CreateUser(newUser);
+    });
+    
     return res.status(201).json({
-      message: "User created successfully",
-      user
+      message: "User created successfully. Please log in."
     });
   } catch (err) {
     console.error("Signup error:", err.message);
@@ -38,27 +38,26 @@ router.post("/auth/signup", async (req, res) => {
   }
 });
 
-/* User Login */
+/* User Login - Sets Supabase access token cookie */
 router.post("/auth/login", async (req, res) => {
   try {
     const { Email, Password } = req.body;
     if (!Email || !Password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const { user, session } = await LoginUser({ Email, Password });
-    res.cookie("Ownexa_Token", session.access_token, {
+    
+    const { session } = await LoginUser({ Email, Password });
+    
+    // Set access token cookie (Supabase manages the session)
+    res.cookie("sb-access-token", session.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 1000, // 1 hour
+      sameSite: "lax",
       path: "/"
     });
+    
     return res.status(200).json({
-      message: "Login successful",
-      user: {
-        id: user.id,
-        email: user.email
-      }
+      message: "Login successful"
     });
   } catch (err) {
     console.error("Login error:", err.message);
@@ -68,33 +67,23 @@ router.post("/auth/login", async (req, res) => {
   }
 });
 
-/* User Logout */
+/* User Logout - Stateless, only clears cookie */
 router.get("/auth/logout", async (req, res) => {
-  try {
-    const token = req.cookies?.sb_token;
-    if (token) {
-      await supabase.auth.signOut({
-        accessToken: token
-      });
-    }
-    res.clearCookie("Ownexa_Token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/"
-    });
-    return res.status(200).json({
-      message: "Logout successful"
-    });
-  } catch (err) {
-    console.error("Logout error:", err.message);
-    return res.status(500).json({
-      error: "Logout failed"
-    });
-  }
+  // Clear access token cookie
+  res.clearCookie("sb-access-token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/"
+  });
+  
+  return res.status(200).json({
+    message: "Logout successful"
+  });
 });
 
-/* User Fetch */
+/* /auth/me - SINGLE SOURCE OF TRUTH for authentication state */
+/* Reads access token from cookie, verifies with Supabase, returns user data */
 router.get("/auth/me", async (req, res) => {
   try {
     const authUser = await getAuthUser(req);
@@ -104,7 +93,7 @@ router.get("/auth/me", async (req, res) => {
       user
     });
   } catch (err) {
-    console.error("Error Faced:", err.message);
+    console.error("Auth check error:", err.message);
     if (err.message === "Unauthorized" || err.message === "Invalid token") {
       return res.status(401).json({
         loggedIn: false,

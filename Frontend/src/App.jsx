@@ -20,6 +20,7 @@ import Home from "./Components/Home";
 import AdminDashboardLayout from "./Layouts/AdminDashboard";
 import Review from "./Pages/Admin/Review";
 import NotFound from "./Components/Extra/NotFound";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 /** Forces scroll to top on refresh + route changes */
 function ScrollManager() {
@@ -50,12 +51,15 @@ function App() {
 
         <Route path="/" element={<MarketLayout />}>
           <Route index element={<Home />} />
+        </Route>
+
+        <Route path="/" element={<ProtectedRoute><MarketLayout /></ProtectedRoute>}>
           <Route path="/PrimaryMarket" element={<PrimaryMarket />} />
           <Route path="/SecondaryMarket" element={<SecondaryMarket />} />
           <Route path="/Property/:id" element={<PropertyCard />} />
         </Route>
 
-        <Route path="/Dashboard" element={<DashboardLayout />}>
+        <Route path="/Dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<ProfilePage />} />
           <Route path="transactions" element={<TransactionsPage />} />
           <Route path="holdings" element={<HoldingsPage />} />
@@ -64,7 +68,7 @@ function App() {
           <Route path="properties" element={<PropertiesPage />} />
         </Route>
 
-        <Route path="/AdminDashboard" element={<AdminDashboardLayout />}>
+        <Route path="/AdminDashboard" element={<ProtectedRoute><AdminDashboardLayout /></ProtectedRoute>}>
           <Route index element={<h1>Hello this is Admin Dashboard</h1>} />
           <Route path="Pending" element={<AdminViewPage />} />
           <Route path="Pending/Property/:id" element={<AdminPropertyPage />} />
